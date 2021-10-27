@@ -1,0 +1,48 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+
+
+#Text=Mụn đầu đen khủng khiếp khiến gần 20 triệu người xem phải rùng mình Mụn đầu đen dưới tai to gần bằng một đốt ngón tay là "nhân vật chính" khiến người xem không thể không rùng mình. Theo TH (Facebook) (Khám Phá)
+1-1	0-3	Mụn	_	_	
+1-2	4-7	đầu	_	_	
+1-3	8-11	đen	_	_	
+1-4	12-17	khủng	_	_	
+1-5	18-23	khiếp	_	_	
+1-6	24-29	khiến	_	_	
+1-7	30-33	gần	_	_	
+1-8	34-36	20	_	_	
+1-9	37-42	triệu	_	_	
+1-10	43-48	người	_	_	
+1-11	49-52	xem	_	_	
+1-12	53-57	phải	_	_	
+1-13	58-62	rùng	_	_	
+1-14	63-67	mình	_	_	
+1-15	68-71	Mụn	_	_	
+1-16	72-75	đầu	_	_	
+1-17	76-79	đen	_	_	
+1-18	80-84	dưới	_	_	
+1-19	85-88	tai	_	_	
+1-20	89-91	to	_	_	
+1-21	92-95	gần	_	_	
+1-22	96-100	bằng	_	_	
+1-23	101-104	một	_	_	
+1-24	105-108	đốt	_	_	
+1-25	109-113	ngón	_	_	
+1-26	114-117	tay	_	_	
+1-27	118-120	là	_	_	
+1-28	121-126	"nhân	_	_	
+1-29	127-130	vật	_	_	
+1-30	131-137	chính"	_	_	
+1-31	138-143	khiến	_	_	
+1-32	144-149	người	_	_	
+1-33	150-153	xem	_	_	
+1-34	154-159	không	_	_	
+1-35	160-163	thể	_	_	
+1-36	164-169	không	_	_	
+1-37	170-174	rùng	_	_	
+1-38	175-180	mình.	_	_	
+1-39	181-185	Theo	_	_	
+1-40	186-188	TH	*	PERSON	
+1-41	189-199	(Facebook)	_	_	
+1-42	200-205	(Khám	_	_	
+1-43	206-210	Phá)	_	_	

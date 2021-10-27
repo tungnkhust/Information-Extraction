@@ -1,0 +1,59 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+
+
+#Text=Phát hiện tiểu hành tinh đôi độc nhất trong Hệ Mặt Trời Tiểu hành tinh đôi có những đặc tính độc nhất và được xếp loại sao chổi có thể giúp trả lời nhiều bí ẩn về Hệ Mặt Trời , trong đó có việc nước xuất hiện trên Trái Đất như thế nào.
+1-1	0-4	Phát	_	_	
+1-2	5-9	hiện	_	_	
+1-3	10-14	tiểu	_	_	
+1-4	15-19	hành	_	_	
+1-5	20-24	tinh	_	_	
+1-6	25-28	đôi	_	_	
+1-7	29-32	độc	_	_	
+1-8	33-37	nhất	_	_	
+1-9	38-43	trong	_	_	
+1-10	44-46	Hệ	*[1]	MISCELLANEOUS[1]	
+1-11	47-50	Mặt	*[1]	MISCELLANEOUS[1]	
+1-12	51-55	Trời	*[1]	MISCELLANEOUS[1]	
+1-13	56-60	Tiểu	_	_	
+1-14	61-65	hành	_	_	
+1-15	66-70	tinh	_	_	
+1-16	71-74	đôi	_	_	
+1-17	75-77	có	_	_	
+1-18	78-83	những	_	_	
+1-19	84-87	đặc	_	_	
+1-20	88-92	tính	_	_	
+1-21	93-96	độc	_	_	
+1-22	97-101	nhất	_	_	
+1-23	102-104	và	_	_	
+1-24	105-109	được	_	_	
+1-25	110-113	xếp	_	_	
+1-26	114-118	loại	_	_	
+1-27	119-122	sao	_	_	
+1-28	123-127	chổi	_	_	
+1-29	128-130	có	_	_	
+1-30	131-134	thể	_	_	
+1-31	135-139	giúp	_	_	
+1-32	140-143	trả	_	_	
+1-33	144-147	lời	_	_	
+1-34	148-153	nhiều	_	_	
+1-35	154-156	bí	_	_	
+1-36	157-159	ẩn	_	_	
+1-37	160-162	về	_	_	
+1-38	163-165	Hệ	*[2]	MISCELLANEOUS[2]	
+1-39	166-169	Mặt	*[2]	MISCELLANEOUS[2]	
+1-40	170-174	Trời	*[2]	MISCELLANEOUS[2]	
+1-41	175-176	,	_	_	
+1-42	177-182	trong	_	_	
+1-43	183-185	đó	_	_	
+1-44	186-188	có	_	_	
+1-45	189-193	việc	_	_	
+1-46	194-198	nước	_	_	
+1-47	199-203	xuất	_	_	
+1-48	204-208	hiện	_	_	
+1-49	209-213	trên	_	_	
+1-50	214-218	Trái	*[3]	LOCATION[3]	
+1-51	219-222	Đất	*[3]	LOCATION[3]	
+1-52	223-226	như	_	_	
+1-53	227-230	thế	_	_	
+1-54	231-235	nào.	_	_	

@@ -1,0 +1,53 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+
+
+#Text=Phố phường rực rỡ sắc màu những ngày cận kề Tết Trung thu Mặc dù còn 2 tuần nữa mới đến Trung Thu nhưng ngay từ những ngày đầu tháng 8 âm lịch này phố Hàng Mã đã tràn ngập sắc Thu. Văn Long Theo Đời sống Plus/GĐVN
+1-1	0-3	Phố	_	_	
+1-2	4-10	phường	_	_	
+1-3	11-14	rực	_	_	
+1-4	15-17	rỡ	_	_	
+1-5	18-21	sắc	_	_	
+1-6	22-25	màu	_	_	
+1-7	26-31	những	_	_	
+1-8	32-36	ngày	_	_	
+1-9	37-40	cận	_	_	
+1-10	41-43	kề	_	_	
+1-11	44-47	Tết	_	_	
+1-12	48-53	Trung	_	_	
+1-13	54-57	thu	_	_	
+1-14	58-61	Mặc	_	_	
+1-15	62-64	dù	_	_	
+1-16	65-68	còn	_	_	
+1-17	69-70	2	_	_	
+1-18	71-75	tuần	_	_	
+1-19	76-79	nữa	_	_	
+1-20	80-83	mới	_	_	
+1-21	84-87	đến	_	_	
+1-22	88-93	Trung	_	_	
+1-23	94-97	Thu	_	_	
+1-24	98-103	nhưng	_	_	
+1-25	104-108	ngay	_	_	
+1-26	109-111	từ	_	_	
+1-27	112-117	những	_	_	
+1-28	118-122	ngày	_	_	
+1-29	123-126	đầu	_	_	
+1-30	127-132	tháng	_	_	
+1-31	133-134	8	_	_	
+1-32	135-137	âm	_	_	
+1-33	138-142	lịch	_	_	
+1-34	143-146	này	_	_	
+1-35	147-150	phố	*[1]	LOCATION[1]	
+1-36	151-155	Hàng	*[1]	LOCATION[1]	
+1-37	156-158	Mã	*[1]	LOCATION[1]	
+1-38	159-161	đã	_	_	
+1-39	162-166	tràn	_	_	
+1-40	167-171	ngập	_	_	
+1-41	172-175	sắc	_	_	
+1-42	176-180	Thu.	_	_	
+1-43	181-184	Văn	*[2]	PERSON[2]	
+1-44	185-189	Long	*[2]	PERSON[2]	
+1-45	190-194	Theo	_	_	
+1-46	195-198	Đời	_	_	
+1-47	199-203	sống	_	_	
+1-48	204-213	Plus/GĐVN	*	ORGANIZATION	

@@ -1,0 +1,80 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+#T_RL=webanno.custom.VLSPRelationextraction|relation|BT_de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity
+
+
+#Text='Khát' nước sạch nghiêm trọng ở vùng tâm bão Hà Tĩnh Sau bão số 10, các giếng khoan, giếng khơi ở nhiều thôn xóm ven biển tại thị xã Kỳ Anh , tỉnh Hà Tĩnh nhiễm phèn, nhiễm mặn. Thiếu nước sinh hoạt, cuộc sống người dân vẫn chưa ổn định trở lại. Trung tâm cấp nước Khu kinh tế Vũng Áng Hà Tĩnh đã đặt nhiều điểm cấp nước miễn phí tại đây.
+1-1	0-6	'Khát'	_	_	_	_	
+1-2	7-11	nước	_	_	_	_	
+1-3	12-16	sạch	_	_	_	_	
+1-4	17-23	nghiêm	_	_	_	_	
+1-5	24-29	trọng	_	_	_	_	
+1-6	30-31	ở	_	_	_	_	
+1-7	32-36	vùng	_	_	_	_	
+1-8	37-40	tâm	_	_	_	_	
+1-9	41-44	bão	_	_	_	_	
+1-10	45-47	Hà	*[1]	LOCATION[1]	_	_	
+1-11	48-52	Tĩnh	*[1]	LOCATION[1]	_	_	
+1-12	53-56	Sau	_	_	_	_	
+1-13	57-60	bão	_	_	_	_	
+1-14	61-63	số	_	_	_	_	
+1-15	64-67	10,	_	_	_	_	
+1-16	68-71	các	_	_	_	_	
+1-17	72-77	giếng	_	_	_	_	
+1-18	78-84	khoan,	_	_	_	_	
+1-19	85-90	giếng	_	_	_	_	
+1-20	91-95	khơi	_	_	_	_	
+1-21	96-97	ở	_	_	_	_	
+1-22	98-103	nhiều	_	_	_	_	
+1-23	104-108	thôn	_	_	_	_	
+1-24	109-112	xóm	_	_	_	_	
+1-25	113-116	ven	_	_	_	_	
+1-26	117-121	biển	_	_	_	_	
+1-27	122-125	tại	_	_	_	_	
+1-28	126-129	thị	*[2]	LOCATION[2]	_	_	
+1-29	130-132	xã	*[2]	LOCATION[2]	_	_	
+1-30	133-135	Kỳ	*[2]	LOCATION[2]	_	_	
+1-31	136-139	Anh	*[2]	LOCATION[2]	_	_	
+1-32	140-141	,	_	_	_	_	
+1-33	142-146	tỉnh	*[3]	LOCATION[3]	PART – WHOLE	1-28[2_3]	
+1-34	147-149	Hà	*[3]	LOCATION[3]	_	_	
+1-35	150-154	Tĩnh	*[3]	LOCATION[3]	_	_	
+1-36	155-160	nhiễm	_	_	_	_	
+1-37	161-166	phèn,	_	_	_	_	
+1-38	167-172	nhiễm	_	_	_	_	
+1-39	173-177	mặn.	_	_	_	_	
+1-40	178-183	Thiếu	_	_	_	_	
+1-41	184-188	nước	_	_	_	_	
+1-42	189-193	sinh	_	_	_	_	
+1-43	194-199	hoạt,	_	_	_	_	
+1-44	200-204	cuộc	_	_	_	_	
+1-45	205-209	sống	_	_	_	_	
+1-46	210-215	người	_	_	_	_	
+1-47	216-219	dân	_	_	_	_	
+1-48	220-223	vẫn	_	_	_	_	
+1-49	224-228	chưa	_	_	_	_	
+1-50	229-231	ổn	_	_	_	_	
+1-51	232-236	định	_	_	_	_	
+1-52	237-240	trở	_	_	_	_	
+1-53	241-245	lại.	_	_	_	_	
+1-54	246-251	Trung	*[4]	ORGANIZATION[4]	_	_	
+1-55	252-255	tâm	*[4]	ORGANIZATION[4]	_	_	
+1-56	256-259	cấp	*[4]	ORGANIZATION[4]	_	_	
+1-57	260-264	nước	*[4]	ORGANIZATION[4]	_	_	
+1-58	265-268	Khu	*[4]	ORGANIZATION[4]	_	_	
+1-59	269-273	kinh	*[4]	ORGANIZATION[4]	_	_	
+1-60	274-276	tế	*[4]	ORGANIZATION[4]	_	_	
+1-61	277-281	Vũng	*[4]	ORGANIZATION[4]	_	_	
+1-62	282-285	Áng	*[4]	ORGANIZATION[4]	_	_	
+1-63	286-288	Hà	*[5]	LOCATION[5]	LOCATED	1-54[4_5]	
+1-64	289-293	Tĩnh	*[5]	LOCATION[5]	_	_	
+1-65	294-296	đã	_	_	_	_	
+1-66	297-300	đặt	_	_	_	_	
+1-67	301-306	nhiều	_	_	_	_	
+1-68	307-311	điểm	_	_	_	_	
+1-69	312-315	cấp	_	_	_	_	
+1-70	316-320	nước	_	_	_	_	
+1-71	321-325	miễn	_	_	_	_	
+1-72	326-329	phí	_	_	_	_	
+1-73	330-333	tại	_	_	_	_	
+1-74	334-338	đây.	_	_	_	_	

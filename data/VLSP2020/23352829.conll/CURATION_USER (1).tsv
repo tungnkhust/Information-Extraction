@@ -1,0 +1,50 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+
+
+#Text=Vòng 19 V.League: Đánh bại Hải Phòng , Quảng Nam dẫn đầu bảng xếp hạng Lại chính là Đinh Thanh Trung ghi bàn quyết định giúp Quảng Nam giành chiến thắng, đồng thời đội bóng của HLV Hoàng Văn Phúc vươn lên dẫn đầu BXH.
+1-1	0-4	Vòng	_	_	
+1-2	5-7	19	_	_	
+1-3	8-17	V.League:	_	_	
+1-4	18-22	Đánh	_	_	
+1-5	23-26	bại	_	_	
+1-6	27-30	Hải	*[1]	ORGANIZATION[1]	
+1-7	31-36	Phòng	*[1]	ORGANIZATION[1]	
+1-8	37-38	,	_	_	
+1-9	39-44	Quảng	*[2]	ORGANIZATION[2]	
+1-10	45-48	Nam	*[2]	ORGANIZATION[2]	
+1-11	49-52	dẫn	_	_	
+1-12	53-56	đầu	_	_	
+1-13	57-61	bảng	_	_	
+1-14	62-65	xếp	_	_	
+1-15	66-70	hạng	_	_	
+1-16	71-74	Lại	_	_	
+1-17	75-80	chính	_	_	
+1-18	81-83	là	_	_	
+1-19	84-88	Đinh	*[3]	PERSON[3]	
+1-20	89-94	Thanh	*[3]	PERSON[3]	
+1-21	95-100	Trung	*[3]	PERSON[3]	
+1-22	101-104	ghi	_	_	
+1-23	105-108	bàn	_	_	
+1-24	109-114	quyết	_	_	
+1-25	115-119	định	_	_	
+1-26	120-124	giúp	_	_	
+1-27	125-130	Quảng	*[4]	ORGANIZATION[4]	
+1-28	131-134	Nam	*[4]	ORGANIZATION[4]	
+1-29	135-140	giành	_	_	
+1-30	141-146	chiến	_	_	
+1-31	147-153	thắng,	_	_	
+1-32	154-158	đồng	_	_	
+1-33	159-163	thời	_	_	
+1-34	164-167	đội	_	_	
+1-35	168-172	bóng	_	_	
+1-36	173-176	của	_	_	
+1-37	177-180	HLV	_	_	
+1-38	181-186	Hoàng	*[5]	PERSON[5]	
+1-39	187-190	Văn	*[5]	PERSON[5]	
+1-40	191-195	Phúc	*[5]	PERSON[5]	
+1-41	196-200	vươn	_	_	
+1-42	201-204	lên	_	_	
+1-43	205-208	dẫn	_	_	
+1-44	209-212	đầu	_	_	
+1-45	213-217	BXH.	_	_	

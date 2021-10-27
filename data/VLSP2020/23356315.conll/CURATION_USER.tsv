@@ -1,0 +1,47 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+
+
+#Text=Uber nhờ cư dân London giúp đỡ Vài giờ sau khi cơ quan quản lý giao thông của thành phố London tước giấy phép của Uber , CEO Dara Khosrowshahi đăng lên twitter cá nhân kêu gọi người dân London giúp đỡ.
+1-1	0-4	Uber	*	ORGANIZATION	
+1-2	5-8	nhờ	_	_	
+1-3	9-11	cư	_	_	
+1-4	12-15	dân	_	_	
+1-5	16-22	London	*	LOCATION	
+1-6	23-27	giúp	_	_	
+1-7	28-30	đỡ	_	_	
+1-8	31-34	Vài	_	_	
+1-9	35-38	giờ	_	_	
+1-10	39-42	sau	_	_	
+1-11	43-46	khi	_	_	
+1-12	47-49	cơ	_	_	
+1-13	50-54	quan	_	_	
+1-14	55-59	quản	_	_	
+1-15	60-62	lý	_	_	
+1-16	63-67	giao	_	_	
+1-17	68-73	thông	_	_	
+1-18	74-77	của	_	_	
+1-19	78-83	thành	_	_	
+1-20	84-87	phố	_	_	
+1-21	88-94	London	*	LOCATION	
+1-22	95-99	tước	_	_	
+1-23	100-104	giấy	_	_	
+1-24	105-109	phép	_	_	
+1-25	110-113	của	_	_	
+1-26	114-118	Uber	*	ORGANIZATION	
+1-27	119-120	,	_	_	
+1-28	121-124	CEO	_	_	
+1-29	125-129	Dara	*[1]	PERSON[1]	
+1-30	130-142	Khosrowshahi	*[1]	PERSON[1]	
+1-31	143-147	đăng	_	_	
+1-32	148-151	lên	_	_	
+1-33	152-159	twitter	_	_	
+1-34	160-162	cá	_	_	
+1-35	163-167	nhân	_	_	
+1-36	168-171	kêu	_	_	
+1-37	172-175	gọi	_	_	
+1-38	176-181	người	_	_	
+1-39	182-185	dân	_	_	
+1-40	186-192	London	*	LOCATION	
+1-41	193-197	giúp	_	_	
+1-42	198-201	đỡ.	_	_	

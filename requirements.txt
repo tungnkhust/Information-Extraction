@@ -1,0 +1,9 @@
+pandas
+transformers==4.11.3
+numpy
+matplotlib
+fastapi
+uvicorn
+sklearn
+pyyaml
+tqdm

@@ -1,0 +1,49 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+#T_RL=webanno.custom.VLSPRelationextraction|relation|BT_de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity
+
+
+#Text=Bộ GD&ĐT nói gì về lạm thu Ông Trần Tú Khánh , Vụ trưởng Vụ kế hoạch Tài chính cho biết Bộ GD&ĐT đã có quy định rất rõ về những khoản Hội cha mẹ hoc sinh được thu và không được thu.
+1-1	0-2	Bộ	*[1]	ORGANIZATION[1]	_	_	
+1-2	3-8	GD&ĐT	*[1]	ORGANIZATION[1]	_	_	
+1-3	9-12	nói	_	_	_	_	
+1-4	13-15	gì	_	_	_	_	
+1-5	16-18	về	_	_	_	_	
+1-6	19-22	lạm	_	_	_	_	
+1-7	23-26	thu	_	_	_	_	
+1-8	27-30	Ông	_	_	_	_	
+1-9	31-35	Trần	*[2]	PERSON[2]	_	_	
+1-10	36-38	Tú	*[2]	PERSON[2]	_	_	
+1-11	39-44	Khánh	*[2]	PERSON[2]	_	_	
+1-12	45-46	,	_	_	_	_	
+1-13	47-49	Vụ	_	_	_	_	
+1-14	50-56	trưởng	_	_	_	_	
+1-15	57-59	Vụ	_	_	_	_	
+1-16	60-62	kế	_	_	_	_	
+1-17	63-68	hoạch	_	_	_	_	
+1-18	69-72	Tài	_	_	_	_	
+1-19	73-78	chính	_	_	_	_	
+1-20	79-82	cho	_	_	_	_	
+1-21	83-87	biết	_	_	_	_	
+1-22	88-90	Bộ	*[3]	ORGANIZATION[3]	AFFILIATION	1-9[2_3]	
+1-23	91-96	GD&ĐT	*[3]	ORGANIZATION[3]	_	_	
+1-24	97-99	đã	_	_	_	_	
+1-25	100-102	có	_	_	_	_	
+1-26	103-106	quy	_	_	_	_	
+1-27	107-111	định	_	_	_	_	
+1-28	112-115	rất	_	_	_	_	
+1-29	116-118	rõ	_	_	_	_	
+1-30	119-121	về	_	_	_	_	
+1-31	122-127	những	_	_	_	_	
+1-32	128-133	khoản	_	_	_	_	
+1-33	134-137	Hội	_	_	_	_	
+1-34	138-141	cha	_	_	_	_	
+1-35	142-144	mẹ	_	_	_	_	
+1-36	145-148	hoc	_	_	_	_	
+1-37	149-153	sinh	_	_	_	_	
+1-38	154-158	được	_	_	_	_	
+1-39	159-162	thu	_	_	_	_	
+1-40	163-165	và	_	_	_	_	
+1-41	166-171	không	_	_	_	_	
+1-42	172-176	được	_	_	_	_	
+1-43	177-181	thu.	_	_	_	_	

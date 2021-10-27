@@ -1,0 +1,42 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+#T_RL=webanno.custom.VLSPRelationextraction|relation|BT_de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity
+
+
+#Text=Hòa Minzy tố trêu đàn em Đức Phúc sống tệ Nghịch ngợm so cao độ, Hòa Minzy phải thốt lên với Đức Phúc : "Em sống tệ lắm đó Phúc ạ!" Theo TH (Facebook) (Khám Phá)
+1-1	0-3	Hòa	*[1]	PERSON[1]	_	_	
+1-2	4-9	Minzy	*[1]	PERSON[1]	_	_	
+1-3	10-12	tố	_	_	_	_	
+1-4	13-17	trêu	_	_	_	_	
+1-5	18-21	đàn	_	_	_	_	
+1-6	22-24	em	_	_	_	_	
+1-7	25-28	Đức	*[2]	PERSON[2]	AFFILIATION	1-1[1_2]	
+1-8	29-33	Phúc	*[2]	PERSON[2]	_	_	
+1-9	34-38	sống	_	_	_	_	
+1-10	39-41	tệ	_	_	_	_	
+1-11	42-48	Nghịch	_	_	_	_	
+1-12	49-53	ngợm	_	_	_	_	
+1-13	54-56	so	_	_	_	_	
+1-14	57-60	cao	_	_	_	_	
+1-15	61-64	độ,	_	_	_	_	
+1-16	65-68	Hòa	*[3]	PERSON[3]	_	_	
+1-17	69-74	Minzy	*[3]	PERSON[3]	_	_	
+1-18	75-79	phải	_	_	_	_	
+1-19	80-84	thốt	_	_	_	_	
+1-20	85-88	lên	_	_	_	_	
+1-21	89-92	với	_	_	_	_	
+1-22	93-96	Đức	*[4]	PERSON[4]	_	_	
+1-23	97-101	Phúc	*[4]	PERSON[4]	_	_	
+1-24	102-103	:	_	_	_	_	
+1-25	104-107	"Em	_	_	_	_	
+1-26	108-112	sống	_	_	_	_	
+1-27	113-115	tệ	_	_	_	_	
+1-28	116-119	lắm	_	_	_	_	
+1-29	120-122	đó	_	_	_	_	
+1-30	123-127	Phúc	*	PERSON	_	_	
+1-31	128-131	ạ!"	_	_	_	_	
+1-32	132-136	Theo	_	_	_	_	
+1-33	137-139	TH	*	PERSON	_	_	
+1-34	140-150	(Facebook)	_	_	_	_	
+1-35	151-156	(Khám	_	_	_	_	
+1-36	157-161	Phá)	_	_	_	_	

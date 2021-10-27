@@ -1,0 +1,42 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+
+
+#Text=Giao lưu trực tuyến cùng siêu mẫu Võ Hoàng Yến Chương trình giao lưu trực tuyến siêu mẫu Võ Hoàng Yến sẽ diễn ra vào 14h00 ngày 22.9.2017 trên thanhnien.vn, Facebook và Youtube Báo Thanh Niên .
+1-1	0-4	Giao	_	_	
+1-2	5-8	lưu	_	_	
+1-3	9-13	trực	_	_	
+1-4	14-19	tuyến	_	_	
+1-5	20-24	cùng	_	_	
+1-6	25-29	siêu	_	_	
+1-7	30-33	mẫu	_	_	
+1-8	34-36	Võ	*[1]	PERSON[1]	
+1-9	37-42	Hoàng	*[1]	PERSON[1]	
+1-10	43-46	Yến	*[1]	PERSON[1]	
+1-11	47-53	Chương	_	_	
+1-12	54-59	trình	_	_	
+1-13	60-64	giao	_	_	
+1-14	65-68	lưu	_	_	
+1-15	69-73	trực	_	_	
+1-16	74-79	tuyến	_	_	
+1-17	80-84	siêu	_	_	
+1-18	85-88	mẫu	_	_	
+1-19	89-91	Võ	*[2]	PERSON[2]	
+1-20	92-97	Hoàng	*[2]	PERSON[2]	
+1-21	98-101	Yến	*[2]	PERSON[2]	
+1-22	102-104	sẽ	_	_	
+1-23	105-109	diễn	_	_	
+1-24	110-112	ra	_	_	
+1-25	113-116	vào	_	_	
+1-26	117-122	14h00	_	_	
+1-27	123-127	ngày	_	_	
+1-28	128-137	22.9.2017	_	_	
+1-29	138-142	trên	_	_	
+1-30	143-156	thanhnien.vn,	_	_	
+1-31	157-165	Facebook	_	_	
+1-32	166-168	và	_	_	
+1-33	169-176	Youtube	_	_	
+1-34	177-180	Báo	*[3]	ORGANIZATION[3]	
+1-35	181-186	Thanh	*[3]	ORGANIZATION[3]	
+1-36	187-191	Niên	*[3]	ORGANIZATION[3]	
+1-37	192-193	.	_	_	

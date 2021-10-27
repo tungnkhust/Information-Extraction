@@ -1,0 +1,30 @@
+#FORMAT=WebAnno TSV 3.2
+
+
+#Text="Mổ bụng" iPhone 8: Lưng kính bền hơn của Galaxy S8 nhưng gần như không thể sửa Video mổ máy iPhone 8 đến từ iFixit. PV
+1-1	0-3	"Mổ	
+1-2	4-9	bụng"	
+1-3	10-16	iPhone	
+1-4	17-19	8:	
+1-5	20-24	Lưng	
+1-6	25-29	kính	
+1-7	30-33	bền	
+1-8	34-37	hơn	
+1-9	38-41	của	
+1-10	42-48	Galaxy	
+1-11	49-51	S8	
+1-12	52-57	nhưng	
+1-13	58-61	gần	
+1-14	62-65	như	
+1-15	66-71	không	
+1-16	72-75	thể	
+1-17	76-79	sửa	
+1-18	80-85	Video	
+1-19	86-88	mổ	
+1-20	89-92	máy	
+1-21	93-99	iPhone	
+1-22	100-101	8	
+1-23	102-105	đến	
+1-24	106-108	từ	
+1-25	109-116	iFixit.	
+1-26	117-119	PV	

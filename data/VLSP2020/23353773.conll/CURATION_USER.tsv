@@ -1,0 +1,68 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+#T_RL=webanno.custom.VLSPRelationextraction|relation|BT_de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity
+
+
+#Text=Chiêm ngưỡng vẻ đẹp bình dị của cảng cá Lộc An nhộn nhịp Những người ngư dân Phan Thiết gắn mình với biển, gắn với cái nghề cá. Cảng cá Lộc An mỗi sáng tấp nập tàu, không khí nhộn nhịp nơi đây thấm đẫm hương vị mặn mòi của biển Phan Thiết . Nguyễn Hiền , Ảnh: thợ chụp kí ức
+1-1	0-5	Chiêm	_	_	_	_	
+1-2	6-12	ngưỡng	_	_	_	_	
+1-3	13-15	vẻ	_	_	_	_	
+1-4	16-19	đẹp	_	_	_	_	
+1-5	20-24	bình	_	_	_	_	
+1-6	25-27	dị	_	_	_	_	
+1-7	28-31	của	_	_	_	_	
+1-8	32-36	cảng	_	_	_	_	
+1-9	37-39	cá	_	_	_	_	
+1-10	40-43	Lộc	*[1]	LOCATION[1]	_	_	
+1-11	44-46	An	*[1]	LOCATION[1]	_	_	
+1-12	47-51	nhộn	_	_	_	_	
+1-13	52-56	nhịp	_	_	_	_	
+1-14	57-62	Những	_	_	_	_	
+1-15	63-68	người	_	_	_	_	
+1-16	69-72	ngư	_	_	_	_	
+1-17	73-76	dân	_	_	_	_	
+1-18	77-81	Phan	*[2]	LOCATION[2]	_	_	
+1-19	82-87	Thiết	*[2]	LOCATION[2]	_	_	
+1-20	88-91	gắn	_	_	_	_	
+1-21	92-96	mình	_	_	_	_	
+1-22	97-100	với	_	_	_	_	
+1-23	101-106	biển,	_	_	_	_	
+1-24	107-110	gắn	_	_	_	_	
+1-25	111-114	với	_	_	_	_	
+1-26	115-118	cái	_	_	_	_	
+1-27	119-123	nghề	_	_	_	_	
+1-28	124-127	cá.	_	_	_	_	
+1-29	128-132	Cảng	_	_	_	_	
+1-30	133-135	cá	_	_	_	_	
+1-31	136-139	Lộc	*[3]	LOCATION[3]	_	_	
+1-32	140-142	An	*[3]	LOCATION[3]	_	_	
+1-33	143-146	mỗi	_	_	_	_	
+1-34	147-151	sáng	_	_	_	_	
+1-35	152-155	tấp	_	_	_	_	
+1-36	156-159	nập	_	_	_	_	
+1-37	160-164	tàu,	_	_	_	_	
+1-38	165-170	không	_	_	_	_	
+1-39	171-174	khí	_	_	_	_	
+1-40	175-179	nhộn	_	_	_	_	
+1-41	180-184	nhịp	_	_	_	_	
+1-42	185-188	nơi	_	_	_	_	
+1-43	189-192	đây	_	_	_	_	
+1-44	193-197	thấm	_	_	_	_	
+1-45	198-201	đẫm	_	_	_	_	
+1-46	202-207	hương	_	_	_	_	
+1-47	208-210	vị	_	_	_	_	
+1-48	211-214	mặn	_	_	_	_	
+1-49	215-218	mòi	_	_	_	_	
+1-50	219-222	của	_	_	_	_	
+1-51	223-227	biển	_	_	_	_	
+1-52	228-232	Phan	*[4]	LOCATION[4]	PART – WHOLE	1-31[3_4]	
+1-53	233-238	Thiết	*[4]	LOCATION[4]	_	_	
+1-54	239-240	.	_	_	_	_	
+1-55	241-247	Nguyễn	*[5]	PERSON[5]	_	_	
+1-56	248-252	Hiền	*[5]	PERSON[5]	_	_	
+1-57	253-254	,	_	_	_	_	
+1-58	255-259	Ảnh:	_	_	_	_	
+1-59	260-263	thợ	_	_	_	_	
+1-60	264-268	chụp	_	_	_	_	
+1-61	269-271	kí	_	_	_	_	
+1-62	272-274	ức	_	_	_	_	

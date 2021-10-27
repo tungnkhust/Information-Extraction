@@ -1,0 +1,60 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+
+
+#Text=Vì sao người Việt chậm cao? 100 năm qua, chiều cao trung bình của người Việt chỉ tăng khoảng 9 cm trong khi người Nhật cao thêm gần 15 cm. Từ một quốc gia có chiều thấp hơn Việt Nam cách đây 60 năm, người Nhật Bản hiện đã cao hơn ta một cái đầu
+1-1	0-2	Vì	_	_	
+1-2	3-6	sao	_	_	
+1-3	7-12	người	*[1]	MISCELLANEOUS[1]	
+1-4	13-17	Việt	*[1]	MISCELLANEOUS[1]	
+1-5	18-22	chậm	_	_	
+1-6	23-27	cao?	_	_	
+1-7	28-31	100	_	_	
+1-8	32-35	năm	_	_	
+1-9	36-40	qua,	_	_	
+1-10	41-46	chiều	_	_	
+1-11	47-50	cao	_	_	
+1-12	51-56	trung	_	_	
+1-13	57-61	bình	_	_	
+1-14	62-65	của	_	_	
+1-15	66-71	người	*[2]	MISCELLANEOUS[2]	
+1-16	72-76	Việt	*[2]	MISCELLANEOUS[2]	
+1-17	77-80	chỉ	_	_	
+1-18	81-85	tăng	_	_	
+1-19	86-92	khoảng	_	_	
+1-20	93-94	9	_	_	
+1-21	95-97	cm	_	_	
+1-22	98-103	trong	_	_	
+1-23	104-107	khi	_	_	
+1-24	108-113	người	*[3]	MISCELLANEOUS[3]	
+1-25	114-118	Nhật	*[3]	MISCELLANEOUS[3]	
+1-26	119-122	cao	_	_	
+1-27	123-127	thêm	_	_	
+1-28	128-131	gần	_	_	
+1-29	132-134	15	_	_	
+1-30	135-138	cm.	_	_	
+1-31	139-141	Từ	_	_	
+1-32	142-145	một	_	_	
+1-33	146-150	quốc	_	_	
+1-34	151-154	gia	_	_	
+1-35	155-157	có	_	_	
+1-36	158-163	chiều	_	_	
+1-37	164-168	thấp	_	_	
+1-38	169-172	hơn	_	_	
+1-39	173-177	Việt	*[4]	LOCATION[4]	
+1-40	178-181	Nam	*[4]	LOCATION[4]	
+1-41	182-186	cách	_	_	
+1-42	187-190	đây	_	_	
+1-43	191-193	60	_	_	
+1-44	194-198	năm,	_	_	
+1-45	199-204	người	*[5]	MISCELLANEOUS[5]	
+1-46	205-209	Nhật	*[5]	MISCELLANEOUS[5]	
+1-47	210-213	Bản	*[5]	MISCELLANEOUS[5]	
+1-48	214-218	hiện	_	_	
+1-49	219-221	đã	_	_	
+1-50	222-225	cao	_	_	
+1-51	226-229	hơn	_	_	
+1-52	230-232	ta	_	_	
+1-53	233-236	một	_	_	
+1-54	237-240	cái	_	_	
+1-55	241-244	đầu	_	_	

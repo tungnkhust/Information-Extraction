@@ -1,0 +1,91 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+
+
+#Text=UBKTTW vào Đà Nẵng công bố vi phạm của Bí thư, Chủ tịch UBKTTW vào Đà Nẵng công bố kết luận về Bí thư, Chủ tịch; Camera ghi cảnh nhóm trộm chân đất đột nhập lấy 8 tỉ; Công an Nghệ An kết luận về vụ giám đốc tát nữ bác sĩ; Điều tra nghi án trộm đột nhập hãm hiếp bé gái 9 tuổi; Nam thanh niên tạt xăng đốt cửa hàng của bạn gái ở TP.HCM ,... là những thông tin chính có trong Bản tin 17h, ngày 22-9.
+1-1	0-6	UBKTTW	*	ORGANIZATION	
+1-2	7-10	vào	_	_	
+1-3	11-13	Đà	*[1]	LOCATION[1]	
+1-4	14-18	Nẵng	*[1]	LOCATION[1]	
+1-5	19-23	công	_	_	
+1-6	24-26	bố	_	_	
+1-7	27-29	vi	_	_	
+1-8	30-34	phạm	_	_	
+1-9	35-38	của	_	_	
+1-10	39-41	Bí	_	_	
+1-11	42-46	thư,	_	_	
+1-12	47-50	Chủ	_	_	
+1-13	51-55	tịch	_	_	
+1-14	56-62	UBKTTW	*	ORGANIZATION	
+1-15	63-66	vào	_	_	
+1-16	67-69	Đà	*[2]	LOCATION[2]	
+1-17	70-74	Nẵng	*[2]	LOCATION[2]	
+1-18	75-79	công	_	_	
+1-19	80-82	bố	_	_	
+1-20	83-86	kết	_	_	
+1-21	87-91	luận	_	_	
+1-22	92-94	về	_	_	
+1-23	95-97	Bí	_	_	
+1-24	98-102	thư,	_	_	
+1-25	103-106	Chủ	_	_	
+1-26	107-112	tịch;	_	_	
+1-27	113-119	Camera	_	_	
+1-28	120-123	ghi	_	_	
+1-29	124-128	cảnh	_	_	
+1-30	129-133	nhóm	_	_	
+1-31	134-138	trộm	_	_	
+1-32	139-143	chân	_	_	
+1-33	144-147	đất	_	_	
+1-34	148-151	đột	_	_	
+1-35	152-156	nhập	_	_	
+1-36	157-160	lấy	_	_	
+1-37	161-162	8	_	_	
+1-38	163-166	tỉ;	_	_	
+1-39	167-171	Công	*[3]	ORGANIZATION[3]	
+1-40	172-174	an	*[3]	ORGANIZATION[3]	
+1-41	175-179	Nghệ	*[3]	ORGANIZATION[3]	
+1-42	180-182	An	*[3]	ORGANIZATION[3]	
+1-43	183-186	kết	_	_	
+1-44	187-191	luận	_	_	
+1-45	192-194	về	_	_	
+1-46	195-197	vụ	_	_	
+1-47	198-202	giám	_	_	
+1-48	203-206	đốc	_	_	
+1-49	207-210	tát	_	_	
+1-50	211-213	nữ	_	_	
+1-51	214-217	bác	_	_	
+1-52	218-221	sĩ;	_	_	
+1-53	222-226	Điều	_	_	
+1-54	227-235	tra nghi	_	_	
+1-55	236-238	án	_	_	
+1-56	239-243	trộm	_	_	
+1-57	244-247	đột	_	_	
+1-58	248-252	nhập	_	_	
+1-59	253-256	hãm	_	_	
+1-60	257-261	hiếp	_	_	
+1-61	262-264	bé	_	_	
+1-62	265-270	gái 9	_	_	
+1-63	271-280	tuổi; Nam	_	_	
+1-64	281-286	thanh	_	_	
+1-65	287-295	niên tạt	_	_	
+1-66	296-300	xăng	_	_	
+1-67	301-304	đốt	_	_	
+1-68	305-308	cửa	_	_	
+1-69	309-317	hàng của	_	_	
+1-70	318-321	bạn	_	_	
+1-71	322-325	gái	_	_	
+1-72	326-327	ở	_	_	
+1-73	328-334	TP.HCM	*	LOCATION	
+1-74	335-339	,...	_	_	
+1-75	340-342	là	_	_	
+1-76	343-348	những	_	_	
+1-77	349-354	thông	_	_	
+1-78	355-358	tin	_	_	
+1-79	359-364	chính	_	_	
+1-80	365-367	có	_	_	
+1-81	368-373	trong	_	_	
+1-82	374-377	Bản	_	_	
+1-83	378-381	tin	_	_	
+1-84	382-386	17h,	_	_	
+1-85	387-391	ngày	_	_	
+1-86	392-397	22-9.	_	_	

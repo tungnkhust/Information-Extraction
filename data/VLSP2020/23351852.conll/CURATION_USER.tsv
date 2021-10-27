@@ -1,0 +1,56 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+
+
+#Text=Đối thoại: Bỏ hay không bỏ Ban đại diện cha mẹ học sinh ? Trước nhiều ý kiến tranh luận về việc bỏ hay không bỏ Ban đại diện cha mẹ học sinh, Báo Thanh Niên tổ chức một buổi đối thoại xung quanh vấn đề này tại địa chỉ thanhnien.vn.
+1-1	0-3	Đối	_	_	
+1-2	4-10	thoại:	_	_	
+1-3	11-13	Bỏ	_	_	
+1-4	14-17	hay	_	_	
+1-5	18-23	không	_	_	
+1-6	24-26	bỏ	_	_	
+1-7	27-30	Ban	_	_	
+1-8	31-34	đại	_	_	
+1-9	35-39	diện	_	_	
+1-10	40-43	cha	_	_	
+1-11	44-46	mẹ	_	_	
+1-12	47-50	học	_	_	
+1-13	51-55	sinh	_	_	
+1-14	56-57	?	_	_	
+1-15	58-63	Trước	_	_	
+1-16	64-69	nhiều	_	_	
+1-17	70-71	ý	_	_	
+1-18	72-76	kiến	_	_	
+1-19	77-82	tranh	_	_	
+1-20	83-87	luận	_	_	
+1-21	88-90	về	_	_	
+1-22	91-95	việc	_	_	
+1-23	96-98	bỏ	_	_	
+1-24	99-102	hay	_	_	
+1-25	103-108	không	_	_	
+1-26	109-111	bỏ	_	_	
+1-27	112-115	Ban	_	_	
+1-28	116-119	đại	_	_	
+1-29	120-124	diện	_	_	
+1-30	125-128	cha	_	_	
+1-31	129-131	mẹ	_	_	
+1-32	132-135	học	_	_	
+1-33	136-141	sinh,	_	_	
+1-34	142-145	Báo	*[1]	ORGANIZATION[1]	
+1-35	146-151	Thanh	*[1]	ORGANIZATION[1]	
+1-36	152-156	Niên	*[1]	ORGANIZATION[1]	
+1-37	157-159	tổ	_	_	
+1-38	160-164	chức	_	_	
+1-39	165-168	một	_	_	
+1-40	169-173	buổi	_	_	
+1-41	174-177	đối	_	_	
+1-42	178-183	thoại	_	_	
+1-43	184-188	xung	_	_	
+1-44	189-194	quanh	_	_	
+1-45	195-198	vấn	_	_	
+1-46	199-201	đề	_	_	
+1-47	202-205	này	_	_	
+1-48	206-209	tại	_	_	
+1-49	210-213	địa	_	_	
+1-50	214-217	chỉ	_	_	
+1-51	218-231	thanhnien.vn.	_	_	

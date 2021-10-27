@@ -1,0 +1,39 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+
+
+#Text=Mexico tuyệt vọng tìm kiếm những người sống sót Dù không có nhiều hy vọng tìm được thêm những người sống sót, các hoạt động tìm kiếm tại Mexico vẫn tiếp tục hôm 22.9.
+1-1	0-6	Mexico	*	LOCATION	
+1-2	7-12	tuyệt	_	_	
+1-3	13-17	vọng	_	_	
+1-4	18-21	tìm	_	_	
+1-5	22-26	kiếm	_	_	
+1-6	27-32	những	_	_	
+1-7	33-38	người	_	_	
+1-8	39-43	sống	_	_	
+1-9	44-47	sót	_	_	
+1-10	48-50	Dù	_	_	
+1-11	51-56	không	_	_	
+1-12	57-59	có	_	_	
+1-13	60-65	nhiều	_	_	
+1-14	66-68	hy	_	_	
+1-15	69-73	vọng	_	_	
+1-16	74-77	tìm	_	_	
+1-17	78-82	được	_	_	
+1-18	83-87	thêm	_	_	
+1-19	88-93	những	_	_	
+1-20	94-99	người	_	_	
+1-21	100-104	sống	_	_	
+1-22	105-109	sót,	_	_	
+1-23	110-113	các	_	_	
+1-24	114-118	hoạt	_	_	
+1-25	119-123	động	_	_	
+1-26	124-127	tìm	_	_	
+1-27	128-132	kiếm	_	_	
+1-28	133-136	tại	_	_	
+1-29	137-143	Mexico	*	LOCATION	
+1-30	144-147	vẫn	_	_	
+1-31	148-152	tiếp	_	_	
+1-32	153-156	tục	_	_	
+1-33	157-160	hôm	_	_	
+1-34	161-166	22.9.	_	_	

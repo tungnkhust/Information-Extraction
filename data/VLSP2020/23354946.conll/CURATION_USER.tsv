@@ -1,0 +1,47 @@
+#FORMAT=WebAnno TSV 3.2
+#T_SP=de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity|identifier|value
+
+
+#Text=Quan lộ thần tốc của vụ phó 9X Vũ Minh Hoàng Tuyển dụng không qua thi tuyển, con đường thăng tiến của vị vụ phó sinh năm 1990 Vũ Minh Hoàng khiến không ít người "choáng váng". Linh Anh - Phan Thiên
+1-1	0-4	Quan	_	_	
+1-2	5-7	lộ	_	_	
+1-3	8-12	thần	_	_	
+1-4	13-16	tốc	_	_	
+1-5	17-20	của	_	_	
+1-6	21-23	vụ	_	_	
+1-7	24-27	phó	_	_	
+1-8	28-30	9X	_	_	
+1-9	31-33	Vũ	*[1]	PERSON[1]	
+1-10	34-38	Minh	*[1]	PERSON[1]	
+1-11	39-44	Hoàng	*[1]	PERSON[1]	
+1-12	45-50	Tuyển	_	_	
+1-13	51-55	dụng	_	_	
+1-14	56-61	không	_	_	
+1-15	62-65	qua	_	_	
+1-16	66-69	thi	_	_	
+1-17	70-76	tuyển,	_	_	
+1-18	77-80	con	_	_	
+1-19	81-86	đường	_	_	
+1-20	87-92	thăng	_	_	
+1-21	93-97	tiến	_	_	
+1-22	98-101	của	_	_	
+1-23	102-104	vị	_	_	
+1-24	105-107	vụ	_	_	
+1-25	108-111	phó	_	_	
+1-26	112-116	sinh	_	_	
+1-27	117-120	năm	_	_	
+1-28	121-125	1990	_	_	
+1-29	126-128	Vũ	*[2]	PERSON[2]	
+1-30	129-133	Minh	*[2]	PERSON[2]	
+1-31	134-139	Hoàng	*[2]	PERSON[2]	
+1-32	140-145	khiến	_	_	
+1-33	146-151	không	_	_	
+1-34	152-154	ít	_	_	
+1-35	155-160	người	_	_	
+1-36	161-168	"choáng	_	_	
+1-37	169-175	váng".	_	_	
+1-38	176-180	Linh	*[3]	PERSON[3]	
+1-39	181-184	Anh	*[3]	PERSON[3]	
+1-40	185-186	-	_	_	
+1-41	187-191	Phan	*[4]	PERSON[4]	
+1-42	192-197	Thiên	*[4]	PERSON[4]	
