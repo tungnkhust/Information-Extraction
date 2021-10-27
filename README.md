@@ -10,12 +10,12 @@ It can extract information in a text and detect relation between them.
 pip install -r requirements.text
 ```
 
-## 2. Command Line Interface
+# 2. Command Line Interface
 
 
-## 3. API Service
+# 3. API Service
 
 
-## 4. References
+# 4. References
 CoNLL04 data: [link](https://cogcomp.seas.upenn.edu/Data/ER/)
 
