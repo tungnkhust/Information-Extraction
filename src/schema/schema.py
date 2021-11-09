@@ -1,6 +1,5 @@
 from typing import Union, Text, List, Iterable
 import logging
-import ast
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -16,6 +15,9 @@ class Token:
             rel_indies: List[int] = None,
             pos_tag: Text = None,
             chunking_tag: Text = None,
+            start: int = None,
+            end: int = None,
+            entity_index: int = None
 
     ):
         """
@@ -35,6 +37,9 @@ class Token:
         self.rel_indies = rel_indies
         self.pos_tag = pos_tag
         self.chunking_tag = chunking_tag
+        self.start = start
+        self.end = end
+        self.entity_index = entity_index
 
     def to_dict(self):
         return {
@@ -53,22 +58,6 @@ class Token:
     def __repr__(self):
         return str(self.to_dict())
 
-    @classmethod
-    def from_text(cls, text):
-        tmp = text.split('\t')
-        index = int(tmp[0])
-        text = tmp[1]
-        bio_tag = tmp[2]
-        rel_tags = ast.literal_eval(tmp[3])
-        rel_indies = ast.literal_eval(tmp[4])
-        return cls(
-            index=index,
-            text=text,
-            bio_tag=bio_tag,
-            rel_tags=rel_tags,
-            rel_indies=rel_indies
-        )
-
 
 class InputExample:
     entities = []
@@ -78,8 +67,12 @@ class InputExample:
             self,
             id: Text = None,
             tokens: List[Token] = None,
+            rel_in: Text = "end"
     ):
+        self.entities = []
+        self.relations = []
         self.id = id
+        self.rel_in = rel_in
         self.tokens = tokens if tokens else []
         self.entities = self.get_entities()
         self.relations = self.get_relations()
@@ -136,8 +129,14 @@ class InputExample:
         for token in self.tokens:
             for i, rel_tag in enumerate(token.rel_tags):
                 if rel_tag != 'N':
-                    head_entity = self.find_entity(end_token=token.index)
-                    tail_entity = self.find_entity(end_token=token.rel_indies[i])
+                    if self.rel_in == "end":
+                        head_entity = self.find_entity(end_token=token.index)
+                        tail_entity = self.find_entity(end_token=token.rel_indies[i])
+                    elif self.rel_in == "begin":
+                        head_entity = self.find_entity(start_token=token.index)
+                        tail_entity = self.find_entity(start_token=token.rel_indies[i])
+                    else:
+                        raise KeyError("rel_in mus be `begin`: begin of entity or `end`: end of entity")
                     if head_entity and tail_entity:
                         relation = rel_tag
                         relations.append({
