@@ -9,7 +9,8 @@ logger.setLevel(logging.INFO)
 
 
 class BaseReader:
-    examples = {}
+    def __init__(self):
+        self.examples = {}
 
     def _load_examples(self, **kwargs):
         raise NotImplementedError()
@@ -27,7 +28,7 @@ class BaseReader:
         for example in examples:
             entities = example.get_entities()
             for e in entities:
-                counter[e["entity"]] += 1
+                counter[e.entity] += 1
 
         return counter
 
@@ -38,12 +39,16 @@ class BaseReader:
         for example in examples:
             relations = example.get_relations()
             for r in relations:
-                head_entity = r["head_entity"]["entity"]
-                tail_entity = r["tail_entity"]["entity"]
-                relation = r["relation"]
+                relation = r.relation
                 r_counter[relation] += 1
-                rdf_counter[f'{head_entity}-{tail_entity}#{relation}'] += 1
+                rdf_counter[r.get_pair_entity()] += 1
         return r_counter, rdf_counter
 
     def get_dataset(self, split: Text = None, **kwargs):
         raise NotImplementedError()
+
+    def get_relations(self, split: Text, **kwargs):
+        relations = []
+        for example in self.get_examples(split):
+            relations.extend(example.get_relations())
+        return relations

@@ -7,3 +7,4 @@ uvicorn
 sklearn
 pyyaml
 tqdm
+neo4j

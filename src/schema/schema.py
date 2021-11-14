@@ -1,4 +1,4 @@
-from typing import Union, Text, List, Iterable
+from typing import Union, Text, List, Iterable, Any, Dict
 import logging
 
 logger = logging.getLogger(__name__)
@@ -59,10 +59,77 @@ class Token:
         return str(self.to_dict())
 
 
-class InputExample:
-    entities = []
-    relations = []
+class Entity:
+    def __init__(
+            self,
+            entity: Text = None,
+            value: Text = None,
+            start: int = None,
+            end: int = None,
+            start_token: int = None,
+            end_token: int = None
+    ):
+        self.entity = entity
+        self.value = value
+        self.start = start
+        self.end = end
+        self.start_token = start_token
+        self.end_token = end_token
 
+    def to_dict(self):
+        return {
+            "entity": self.entity,
+            "value": self.value,
+            "start_token": self.start_token,
+            "end_token": self.end_token
+        }
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def to_cypher(self, name=''):
+        return f'({name}:{self.entity} ' + '{value: "' + self.value + '"})'
+
+
+class Relation:
+    rel_map = {
+        "Live_In": "LIVE_IN",
+        "Located_In": "LOCATED_IN",
+        "OrgBased_IN": "OGR_BASED_IN",
+        "Kill": "KILL"
+    }
+
+    def __init__(
+            self,
+            source_entity: Entity = None,
+            target_entity: Entity = None,
+            relation: Text = None,
+            source: List[Text] = None,
+            meta: Dict = None
+    ):
+        self.source_entity = source_entity
+        self.target_entity = target_entity
+        self.relation = relation
+        self.source = source if source else []
+        self.meta = meta
+
+    def __str__(self):
+        source = f'({self.source_entity.entity}:{self.source_entity.value})'
+        target = f'({self.target_entity.entity}:{self.target_entity.value})'
+        relation = f'[:{self.relation} ' + '{source: "' + str(self.source) + '"}]'
+        return f'({source})-[{relation}]->({target})'
+
+    def to_cypher(self, e1_name='', e2_name=''):
+        source = self.source_entity.to_cypher(e1_name)
+        target = self.target_entity.to_cypher(e2_name)
+        relation = self.relation
+        return f'{source}-[:{relation}]->{target}'
+
+    def get_pair_entity(self):
+        return f'{self.source_entity.entity}-{self.target_entity.entity}#{self.relation}'
+
+
+class InputExample:
     def __init__(
             self,
             id: Text = None,
@@ -74,8 +141,8 @@ class InputExample:
         self.id = id
         self.rel_in = rel_in
         self.tokens = tokens if tokens else []
-        self.entities = self.get_entities()
-        self.relations = self.get_relations()
+        self.entities = self._get_entities()
+        self.relations = self._get_relations()
 
     def num_entities(self):
         return len(self.entities)
@@ -84,6 +151,9 @@ class InputExample:
         return len(self.relations)
 
     def get_entities(self):
+        return self.entities
+
+    def _get_entities(self):
         entities = []
         s = 0
         e = 0
@@ -93,7 +163,8 @@ class InputExample:
             if token.bio_tag[0] == "B":
                 if i > 0 and self.tokens[i-1].bio_tag[0] != "O":
                     value = " ".join([t.text for t in self.tokens][s:e + 1])
-                    entities.append({"entity": entity, "start_token": s, "end_token": e, "value": value})
+                    ent = Entity(entity=entity, value=value, start_token=s, end_token=e)
+                    entities.append(ent)
 
                 s = i
                 e = i
@@ -101,17 +172,20 @@ class InputExample:
 
                 if i == len(self.tokens) - 1:
                     value = " ".join([t.text for t in self.tokens][s:e + 1])
-                    entities.append({"entity": entity, "start_token": s, "end_token": e, "value": value})
+                    ent = Entity(entity=entity, value=value, start_token=s, end_token=e)
+                    entities.append(ent)
 
             elif token.bio_tag[0] == "I":
                 e += 1
                 if i == len(self.tokens) - 1:
                     value = " ".join([t.text for t in self.tokens][s:e + 1])
-                    entities.append({"entity": entity, "start_token": s, "end_token": e, "value": value})
+                    ent = Entity(entity=entity, value=value, start_token=s, end_token=e)
+                    entities.append(ent)
             elif token.bio_tag[0] == "O":
                 if entity is not None:
                     value = " ".join([t.text for t in self.tokens][s:e + 1])
-                    entities.append({"entity": entity, "start_token": s, "end_token": e, "value": value})
+                    ent = Entity(entity=entity, value=value, start_token=s, end_token=e)
+                    entities.append(ent)
                     entity = None
 
         return entities
@@ -119,31 +193,35 @@ class InputExample:
     def find_entity(self, entity: Text = None, start_token: int = None, end_token: int = None):
         entities = self.entities if self.entities else self.get_entities()
         for e in entities:
-            if e['entity'] == entity or e['start_token'] == start_token or e['end_token'] == end_token:
+            if e.entity == entity or e.start_token == start_token or e.end_token == end_token:
                 return e
         return None
 
     def get_relations(self):
+        return self.relations
+
+    def _get_relations(self):
         relations = []
 
         for token in self.tokens:
             for i, rel_tag in enumerate(token.rel_tags):
                 if rel_tag != 'N':
                     if self.rel_in == "end":
-                        head_entity = self.find_entity(end_token=token.index)
-                        tail_entity = self.find_entity(end_token=token.rel_indies[i])
+                        source_entity = self.find_entity(end_token=token.index)
+                        target_entity = self.find_entity(end_token=token.rel_indies[i])
                     elif self.rel_in == "begin":
-                        head_entity = self.find_entity(start_token=token.index)
-                        tail_entity = self.find_entity(start_token=token.rel_indies[i])
+                        source_entity = self.find_entity(start_token=token.index)
+                        target_entity = self.find_entity(start_token=token.rel_indies[i])
                     else:
                         raise KeyError("rel_in mus be `begin`: begin of entity or `end`: end of entity")
-                    if head_entity and tail_entity:
-                        relation = rel_tag
-                        relations.append({
-                            "head_entity": head_entity,
-                            "tail_entity": tail_entity,
-                            "relation": relation
-                        })
+                    if source_entity and target_entity:
+                        rel = Relation(
+                            source_entity=source_entity,
+                            target_entity=target_entity,
+                            relation=rel_tag,
+                            source=[self.get_text()]
+                        )
+                        relations.append(rel)
         return relations
 
     def get_text(self):
