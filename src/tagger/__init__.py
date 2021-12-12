@@ -1,0 +1,1 @@
+from src.tagger.base import TaggerBase
