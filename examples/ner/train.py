@@ -1,4 +1,4 @@
-from src.tagger.NERTagger import LstmNER
+from src.tagger.LstmNER import LstmNER
 from src.data_reader.CoNLLReader import CoNLLReader
 from src.tagger.dataset_reader.CoNLLDatasetReader import CoNLLDatasetReader
 from src.tagger.model.CRFTagger import CRFTagger
