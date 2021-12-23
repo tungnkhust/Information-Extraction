@@ -1,5 +1,4 @@
 pandas
-transformers==4.11.3
 numpy
 matplotlib
 fastapi
@@ -9,5 +8,4 @@ pyyaml
 tqdm
 neo4j
 neuralcoref
-spacy==2.1
 allennlp==2.7.0

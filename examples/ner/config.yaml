@@ -1,0 +1,100 @@
+DATASET:
+  # The path to train dataset
+  train_path: data/CoNLL04/train.txt
+  # The path to test dataset
+  dev_path: data/CoNLL04/dev.txt
+  # The path to test dataset
+  test_path: data/CoNLL04/test.txt
+  # Define the column text input in DataFrame dataset 
+  text_cols: text
+  # Define the column intent label in DataFrame dataset 
+  intent_cols: intent
+  # Define the column tag label in DataFrame dataset 
+  tag_cols: tags
+  # Define function pre-processing
+  pre_processing:
+    # lower token
+    lowercase_token: True
+    # remove special token, included of punctuation token, characters without vietnamese characters
+    rm_special_token: False
+    # remove url
+    rm_url: True
+    # remove emoji token
+    rm_emoji: True
+    # if not Fasle, using balance data, the params included of {'size': 300, 'replace': False}.
+    balance: False
+
+VOCAB:
+  vocabulary_dir: null
+  min_count: null
+  extend_from_data: True
+  label_namespace: "labels"
+
+MODEL:
+  input_features:
+    type: text
+    level: ["word", "character"]
+    encoder: 
+      name: Onenet
+      args:
+        embedding: ## Embedding follow level
+            word:
+                # the number of word embedding dimension
+                embedding_dim: 50
+                # The pretrained word embeding {'vi-glove-50d', 'vi-glove-100d'} or path to the word embedding
+                pretrained_file: null
+            character:
+                # the number of char embedding dimension
+                embedding_dim: 30
+                # the type of char encoder type
+                encoder_type: cnn
+                # the number of filters of cnn
+                num_filters: 128
+                # the ngram filter sizes
+                ngram_filter_sizes: [ 3 ]
+                # the activation of convolutional layer
+                conv_layer_activation: relu
+                pretrained_file: null
+        sequence_encoder:
+          # the number of dropout
+          dropout: 0.5
+          # rnn type
+          rnn_type: 'lstm'
+          # if True, use bidirectional
+          bidirectional: True
+          # the number of hidden size layer
+          hidden_size: 200
+          # the number of rnn layer
+          num_layers: 2
+          feedforward: null
+
+
+  output_features:
+    # Define tag type, examples as: class
+    label_encoding: "BIO"
+    decoder:
+      crf:
+        constrain_crf_decoding: true
+
+TRAINING_MODEL:
+  # The directory to save model
+  base_path: ./models
+  # the file name of model 
+  model_name: ner
+  # Save model, if True, storages the best model, otherwise storages the final model
+  is_save_best_model: True
+  # The hyper-parameters for training the classify model 
+  hyper_params:
+    # The batch size
+    batch_size: 64
+    # The number epochs to training
+    num_epochs: 3
+    grad_clipping: 5.0
+    optimize:
+      # The learning rate
+      optimizer: adam
+      learning_rate: 0.001
+      weight_decay: 0.0001
+  metrics:
+    calculate_span_f1: true
+    verbose_metrics: false

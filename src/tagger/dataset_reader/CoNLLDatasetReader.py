@@ -4,10 +4,11 @@ from typing import Dict, Optional, List, Text, Sequence, Iterable
 
 from allennlp.data import DatasetReader
 from allennlp.data import TokenIndexer
-from allennlp.data.token_indexers import SingleIdTokenIndexer
+from allennlp.data.token_indexers import SingleIdTokenIndexer, TokenCharactersIndexer
 from allennlp.data.instance import Instance
 from allennlp.data.tokenizers import Token
 from allennlp.data.fields import TextField, SequenceLabelField, Field, MetadataField
+from allennlp.data.tokenizers import WhitespaceTokenizer, Tokenizer
 
 
 class CoNLLDatasetReader(DatasetReader):
@@ -15,8 +16,8 @@ class CoNLLDatasetReader(DatasetReader):
             self,
             token_indexers: Dict[str, TokenIndexer] = None,
             tag_label: str = "ner",
-            feature_labels: Sequence(str) = (),
             label_namespace: str = "labels",
+            tokenizer: Tokenizer = WhitespaceTokenizer(),
             **kwarg
     ):
         super().__init__(**kwarg)
@@ -24,25 +25,29 @@ class CoNLLDatasetReader(DatasetReader):
         self._token_indexers = token_indexers or {"tokens": SingleIdTokenIndexer()}
 
         self.tag_label = tag_label
-        self.feature_labels = feature_labels
+        # self.feature_labels = feature_labels
         self.label_namespace = label_namespace
-        self.__original_coding_scheme = "IOB1"
+        self.__original_coding_scheme = "BIO"
+        self.tokenizer = tokenizer
 
     def _read(self, examples: List[InputExample]) -> Iterable[Instance]:
         for example in examples:
-            tokens = example.get_text().split(" ")
+            text = example.get_text()
             ner_tags = example.get_bio_tags().split(" ")
-            tokens = [Token(token) for token in tokens]
-            yield self.text_to_instance(tokens, ner_tags)
+            yield self.text_to_instance(text, ner_tags)
 
     def text_to_instance(
             self,
-            tokens: List[Token],
-            ner_tags:List[str] = None
+            text: Text,
+            ner_tags: List[str] = None
     ) -> Instance:
-        sequence = TextField(tokens)
-        instance_fields = {"tokens": sequence}
-        instance_fields["metadata"] = MetadataField({"words": [x.text for x in tokens]})
-
+        tokens = self.tokenizer.tokenize(text)
+        sequence = TextField(tokens, self._token_indexers)
+        instance_fields = {
+            "tokens": sequence
+        }
+        if ner_tags:
+            instance_fields["tags"] = SequenceLabelField(ner_tags, sequence, self.label_namespace)
+        return Instance(instance_fields)
 
 

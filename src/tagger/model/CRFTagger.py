@@ -16,7 +16,7 @@ import allennlp.nn.util as util
 from allennlp.training.metrics import CategoricalAccuracy, SpanBasedF1Measure
 
 
-class CrfTagger(Model):
+class CRFTagger(Model):
     def __init__(
             self,
             vocab: Vocabulary,
@@ -27,8 +27,8 @@ class CrfTagger(Model):
             label_encoding: Optional[str] = None,
             include_start_end_transitions: bool = None,
             constrain_crf_decoding: bool = None,
-            calculate_span_f1: bool = None,
-            dropout: Optional[float] = None,
+            calculate_span_f1: bool = True,
+            dropout: Optional[float] = 0.3,
             verbose_metrics: bool = False,
             initializer: InitializerApplicator = InitializerApplicator(),
             top_k: int = 1,
@@ -136,7 +136,6 @@ class CrfTagger(Model):
 
         logits = self.tag_projection_layer(encoded_text)
         best_paths = self.crf.viterbi_tags(logits=logits, mask=mask, top_k=self.top_k)
-
         # Just get the top tags and ignore the scores.
         predicted_tags = cast(List[List[int]], [x[0][0] for x in best_paths])
 
@@ -182,7 +181,6 @@ class CrfTagger(Model):
                 {"tags": decode_tags(scored_path[0]), "score": scored_path[1]}
                 for scored_path in top_k_tags
             ]
-
         output_dict["tags"] = [decode_tags(t) for t in output_dict["tags"]]
 
         if "top_k_tags" in output_dict:
