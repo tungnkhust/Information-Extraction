@@ -129,3 +129,6 @@ dmypy.json
 .pyre/
 .idea
 /models
+/report
+/pre-trained
+test.py

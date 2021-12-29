@@ -140,21 +140,23 @@ class LstmNER(TaggerBase):
             write_json(config, config_path)
             shutil.move(os.path.join(serialization_dir, "best.th"), os.path.join(model_dir, "best.th"))
 
-    def evaluate(self, test_path=None, batch_size=64, **kwargs):
-        data_reader = CoNLLReader(test_path=test_path)
-        if test_path is not None:
-            test_data = list(self.dataset_reader.read(data_reader.get_examples("test")))
-        else:
-            raise Exception("Don't have test data please pass test_path arguments")
-
-        test_loader = SimpleDataLoader(test_data, batch_size=batch_size, shuffle=False)
-        test_loader.index_with(self.model.vocab)
-        self.model.eval()
-        results = evaluate(self.model.to(self.device), test_loader)
-        print(results)
+    # def evaluate(self, test_path=None, batch_size=64, **kwargs):
+    #     data_reader = CoNLLReader(test_path=test_path)
+    #     if test_path is not None:
+    #         test_data = list(self.dataset_reader.read(data_reader.get_examples("test")))
+    #     else:
+    #         raise Exception("Don't have test data please pass test_path arguments")
+    #
+    #     test_loader = SimpleDataLoader(test_data, batch_size=batch_size, shuffle=False)
+    #     test_loader.index_with(self.model.vocab)
+    #     self.model.eval()
+    #     results = evaluate(self.model.to(self.device), test_loader)
+    #     return results
 
     @classmethod
     def from_config(cls, config: Dict, weight_path=None, **kwargs):
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
         data_cfg = config["DATASET"]
         data_reader = CoNLLReader(
             train_path=data_cfg.get("train_path", None),
@@ -207,6 +209,10 @@ class LstmNER(TaggerBase):
                             vocab_namespace='tokens',
                             vocab=vocab,
                             pretrained_file=embed_cfg[key]["pretrained_file"])
+
+                    if embed_cfg[key]["pretrained_file"]:
+                        print(f"pretrain word embedding: {embed_cfg[key]['pretrained_file']}")
+
                 elif key == "character":
                     char_embedding = Embedding(
                             embedding_dim=embed_cfg[key]["embedding_dim"],
@@ -283,7 +289,11 @@ class LstmNER(TaggerBase):
         )
 
         if weight_path and os.path.exists(weight_path):
-            model.load_state_dict(torch.load(weight_path))
+            if device == "cpu":
+                model.load_state_dict(torch.load(weight_path, map_location=torch.device(device)))
+            else:
+                model.load_state_dict(torch.load(weight_path))
+
             print(f"Load model weight from {weight_path}\n")
 
         return cls(
@@ -298,5 +308,7 @@ class LstmNER(TaggerBase):
         config_path = os.path.join(model_dir, "config.json")
         config_path = os.path.abspath(config_path)
         config = load_json(config_path)
+        vocab_dir = os.path.join(model_dir, "vocabulary")
+        config["VOCAB"]["vocabulary_dir"] = vocab_dir
         weight_path = os.path.join(model_dir, "best.th")
         return cls.from_config(config=config, weight_path=weight_path)
