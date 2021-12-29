@@ -77,6 +77,7 @@ class LstmNER(TaggerBase):
             test_path=None,
             serialization_dir=None,
             model_name="ner",
+            rm_metric=False,
             **kwargs
     ):
         if serialization_dir and os.path.exists(serialization_dir):
@@ -139,6 +140,9 @@ class LstmNER(TaggerBase):
             print(f"Save config in {config_path}")
             write_json(config, config_path)
             shutil.move(os.path.join(serialization_dir, "best.th"), os.path.join(model_dir, "best.th"))
+
+            if rm_metric:
+                shutil.rmtree(serialization_dir)
 
     # def evaluate(self, test_path=None, batch_size=64, **kwargs):
     #     data_reader = CoNLLReader(test_path=test_path)

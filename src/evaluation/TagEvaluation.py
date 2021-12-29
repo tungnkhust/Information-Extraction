@@ -10,7 +10,7 @@ from src.evaluation.utils import plot_confusion_matrix, Column
 ROOT_PATH = sys.path[1]
 
 
-def get_entity_from_BIO(tags: List[str]) -> List:
+def get_entity_from_BIO(tags: List[str], tokens: List = None) -> List:
     """
     Get entities from BIO tags.
     :param tags: List of tagging for each tokens.
@@ -28,14 +28,23 @@ def get_entity_from_BIO(tags: List[str]) -> List:
             s = i
             e = i
             if i == len(tags) - 1:
-                entities.append({'entity': entity, 'start': s, 'end': e})
+                entity_dict = {'entity': entity, 'start': s, 'end': e}
+                if tokens:
+                    entity_dict["value"] = " ".join(tokens[s:e+1])
+                entities.append(entity_dict)
         elif tag[0] == 'I':
             e += 1
             if i == len(tags) - 1:
-                entities.append({'entity': entity, 'start': s, 'end': e})
+                entity_dict = {'entity': entity, 'start': s, 'end': e}
+                if tokens:
+                    entity_dict["value"] = " ".join(tokens[s:e+1])
+                entities.append(entity_dict)
         elif tag == 'O':
             if entity is not None:
-                entities.append({'entity': entity, 'start': s, 'end': e})
+                entity_dict = {'entity': entity, 'start': s, 'end': e}
+                if tokens:
+                    entity_dict["value"] = " ".join(tokens[s:e+1])
+                entities.append(entity_dict)
                 entity = None
 
     return entities
@@ -75,7 +84,7 @@ def compare_entity(e_true: dict, e_pred: dict):
         return 5
 
 
-def compute_score_on_sample(y_true: list, y_pred: list):
+def compute_score(y_true: list, y_pred: list, tokens: list = None):
     """
     Get metric to evaluate for y_true and y_pred.
     :param y_true: List of tagging for each tokens of ground truth label .
@@ -83,8 +92,8 @@ def compute_score_on_sample(y_true: list, y_pred: list):
     :return: Dict include metric to evaluate for each entity
     and list of incorrect, missing and spurius entities.
     """
-    entities_true = get_entity_from_BIO(y_true)
-    entities_pred = get_entity_from_BIO(y_pred)
+    entities_true = get_entity_from_BIO(y_true, tokens)
+    entities_pred = get_entity_from_BIO(y_pred, tokens)
     metrics = {
         'support': len(entities_true),
         'cor': 0,
@@ -136,7 +145,14 @@ def compute_score_on_sample(y_true: list, y_pred: list):
             metrics['spu'] += 1
             spurius.append(e2)
             del entities_pred[0]
-    return metrics, correct, incorrect, missing, spurius
+
+    return {
+        "metric": metrics,
+        "correct": correct,
+        "incorrect": incorrect,
+        "missing": missing,
+        "spurius": spurius,
+    }
 
 
 def get_metrics(y_true: List[List], y_pred: List[List]):
@@ -156,7 +172,13 @@ def get_metrics(y_true: List[List], y_pred: List[List]):
     spuriuses = []
 
     for i in range(n_samples):
-        metric, correct, incorrect, missing, spurius = compute_score_on_sample(y_true[i], y_pred[i])
+        scores = compute_score(y_true[i], y_pred[i])
+        metric = scores["metric"]
+        correct = scores["correct"]
+        incorrect = scores["incorrect"]
+        missing = scores["missing"]
+        spurius = scores["spurius"]
+
         metrics['cor'] += metric['cor']
         metrics['inc'] += metric['inc']
         metrics['par'] += metric['par']
@@ -168,7 +190,13 @@ def get_metrics(y_true: List[List], y_pred: List[List]):
         missings.append(missing)
         spuriuses.append(spurius)
 
-    return metrics, corrects, incorrects, missings, spuriuses
+    return {
+        "metrics": metrics,
+        "corrects": corrects,
+        "incorrects": incorrects,
+        "missings": missings,
+        "spuriuses": spuriuses,
+    }
 
 
 def precision_score(y_true: List[List], y_pred: List[List], epsilon=1e-6, soft_eval=False):
@@ -179,7 +207,9 @@ def precision_score(y_true: List[List], y_pred: List[List], epsilon=1e-6, soft_e
     :param epsilon:
     :return: precision score.
     """
-    metrics, _, _, _, _ = get_metrics(y_true, y_pred)
+    scores = get_metrics(y_true, y_pred)
+    metrics = scores["metrics"]
+
     act = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['spu']
     if soft_eval is True:
         precision = (metrics['cor'] + metrics['par'] + epsilon) / (act + epsilon)
@@ -196,7 +226,9 @@ def recall_score(y_true: List[List], y_pred: List[List], epsilon=1e-6, soft_eval
     :param epsilon:
     :return: recall score.
     """
-    metrics, _, _, _, _ = get_metrics(y_true, y_pred)
+    scores = get_metrics(y_true, y_pred)
+    metrics = scores["metrics"]
+
     pos = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['mis']
     if soft_eval is True:
         recall = (metrics['cor'] + metrics['par'] + epsilon)/(pos+epsilon)
@@ -213,7 +245,9 @@ def f1_score(y_true: List[List], y_pred: List[List], epsilon=1e-6, soft_eval=Fal
     :param epsilon:
     :return: f1-score score.
     """
-    metrics, _, _, _, _ = get_metrics(y_true, y_pred)
+    scores = get_metrics(y_true, y_pred)
+    metrics = scores["metrics"]
+
     act = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['spu']
     pos = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['mis']
     if soft_eval is True:
@@ -304,7 +338,12 @@ class TagEvaluation:
         if isinstance(pred_tags, str):
             pred_tags = [tag.split(' ') for tag in pred_tags]
 
-        metrics, corrects, incorrects, missings, spuriuses = get_metrics(true_tags, pred_tags)
+        scores = get_metrics(true_tags, pred_tags)
+        metrics = scores["metrics"]
+        corrects = scores["corrects"]
+        incorrects = scores["incorrects"]
+        missings = scores["missings"]
+        spuriuses = scores["spuriuses"]
 
         act = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['spu']
         if soft_eval is True:

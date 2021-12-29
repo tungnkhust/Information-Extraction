@@ -144,6 +144,9 @@ class InputExample:
         self.entities = self._get_entities()
         self.relations = self._get_relations()
 
+    def get_length(self):
+        return len(self.tokens)
+
     def num_entities(self):
         return len(self.entities)
 
