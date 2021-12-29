@@ -61,6 +61,9 @@ class LstmNER(TaggerBase):
         self.device = torch.device(device)
         self.cuda_device = cuda_device
 
+        if self.model:
+            self.model.to(self.device)
+
     def run(self, text: Text, **kwargs):
         instance = self.dataset_reader.text_to_instance(text)
         output = self.model.forward_on_instance(instance)
