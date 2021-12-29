@@ -104,7 +104,7 @@ class CRFTagger(Model):
             "text field embedding dim",
             "encoder input dim"
         ),
-        if feedforward is not None:
+        if feedforward:
             check_dimensions_match(
                 encoder.get_output_dim(),
                 feedforward.get_input_dim(),

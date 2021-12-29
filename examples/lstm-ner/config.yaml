@@ -66,7 +66,11 @@ MODEL:
           hidden_size: 200
           # the number of rnn layer
           num_layers: 2
-          feedforward: null
+          feedforward:
+            add_feedforward: true
+            hidden_dims: [200]
+            num_layers: 1
+            activations: ['relu']
 
 
   output_features:
@@ -88,7 +92,7 @@ TRAINING_MODEL:
     # The batch size
     batch_size: 64
     # The number epochs to training
-    num_epochs: 3
+    num_epochs: 2
     grad_clipping: 5.0
     optimize:
       # The learning rate

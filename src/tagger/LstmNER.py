@@ -6,6 +6,7 @@ from scipy.special import softmax
 
 import torch
 import torch.nn.functional as f
+import torch.nn as nn
 
 from src.tagger import TaggerBase
 from src.data_reader import BaseReader
@@ -28,6 +29,10 @@ from allennlp.modules.seq2vec_encoders import CnnEncoder, LstmSeq2VecEncoder, Gr
 from allennlp.modules.text_field_embedders import BasicTextFieldEmbedder
 from allennlp.modules.token_embedders import TokenCharactersEncoder
 from allennlp.modules.token_embedders import Embedding
+from allennlp.modules.feedforward import FeedForward
+from allennlp.nn.activations import Activation
+
+
 from allennlp.training.trainer import Trainer
 from allennlp.data.vocabulary import Vocabulary
 from allennlp.models.archival import archive_model, Archive
@@ -141,8 +146,14 @@ class LstmNER(TaggerBase):
             write_json(config, config_path)
             shutil.move(os.path.join(serialization_dir, "best.th"), os.path.join(model_dir, "best.th"))
 
+            final_train_result_path = os.path.join(serialization_dir, f"metrics_epoch_{num_epochs-1}.json")
+            final_train_result = load_json(final_train_result_path)
             if rm_metric:
                 shutil.rmtree(serialization_dir)
+        else:
+            final_train_result = {}
+
+        return final_train_result
 
     # def evaluate(self, test_path=None, batch_size=64, **kwargs):
     #     data_reader = CoNLLReader(test_path=test_path)
@@ -268,6 +279,28 @@ class LstmNER(TaggerBase):
                         bidirectional=bidirectional,
                         dropout=dropout)
 
+        ff_cfg = seq_encoder_cfg["feedforward"]
+        if ff_cfg["add_feedforward"]:
+            if isinstance(ff_cfg["activations"], str):
+                activations = Activation.by_name(ff_cfg["activations"])()
+            elif isinstance(ff_cfg["activations"], list):
+                activations = [Activation.by_name(name)() for name in ff_cfg["activations"]]
+            else:
+                activations = Activation.by_name("relu")()
+
+            if ff_cfg["hidden_dims"]:
+                feedforward = FeedForward(
+                        input_dim=encoder.get_output_dim(),
+                        dropout=dropout,
+                        hidden_dims=ff_cfg["hidden_dims"],
+                        num_layers=ff_cfg["num_layers"],
+                        activations=activations
+                )
+            else:
+                feedforward = None
+        else:
+            feedforward = None
+
         decoder_cfg = config["MODEL"]["output_features"]["decoder"]
         if "crf" in decoder_cfg:
             constrain_crf_decoding = decoder_cfg["crf"].get("constrain_crf_decoding", False)
@@ -283,6 +316,7 @@ class LstmNER(TaggerBase):
             label_encoding=model_clf["output_features"]["label_encoding"],
             text_field_embedder=text_field_embedder,
             encoder=encoder,
+            feedforward=feedforward,
             top_k=1,
             dropout=dropout,
             serialization_dir=model_path,
