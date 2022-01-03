@@ -87,6 +87,9 @@ class Entity:
     def __str__(self):
         return str(self.to_dict())
 
+    def __repr__(self):
+        return str(self.to_dict())
+
     def to_cypher(self, name=''):
         return f'({name}:{self.entity} ' + '{value: "' + self.value + '"})'
 
@@ -119,6 +122,9 @@ class Relation:
         relation = f'[:{self.relation} ' + '{source: "' + str(self.source) + '"}]'
         return f'({source})-[{relation}]->({target})'
 
+    def __repr__(self):
+        return str(self)
+
     def to_cypher(self, e1_name='', e2_name=''):
         source = self.source_entity.to_cypher(e1_name)
         target = self.target_entity.to_cypher(e2_name)
@@ -134,7 +140,9 @@ class InputExample:
             self,
             id: Text = None,
             tokens: List[Token] = None,
-            rel_in: Text = "end"
+            rel_in: Text = "end",
+            rel_in_tag: bool = True,
+            relations: List[Relation] = []
     ):
         self.entities = []
         self.relations = []
@@ -142,7 +150,59 @@ class InputExample:
         self.rel_in = rel_in
         self.tokens = tokens if tokens else []
         self.entities = self._get_entities()
-        self.relations = self._get_relations()
+
+        if rel_in_tag:
+            self.relations = self._get_relations()
+        else:
+            self.relations = relations
+
+    def to_tacred(self):
+        tac_examples = []
+        if self.relations:
+            for rel in self.relations:
+                tac_examples.append({
+                    "id": self.id,
+                    "relation": rel.relation,
+                    "token": self.get_tokens(),
+                    "subj_start": rel.source_entity.start_token,
+                    "subj_end": rel.source_entity.end_token,
+                    "obj_start": rel.target_entity.start_token,
+                    "obj_end": rel.target_entity.end_token,
+                    "subj_type": rel.source_entity.entity,
+                    "obj_type": rel.target_entity.entity,
+                    "stanford_pos": self.get_pos_tags(),
+                    "stanford_ner": [tag.strip("BI-") for tag in self.get_pos_tags()],
+                    "stanford_head": [],
+                    "stanford_deprel": []
+                })
+        else:
+            tac_examples.append({
+                "id": self.id,
+                "relation": "no_relation",
+                "token": self.get_tokens(),
+                "subj_start": 0,
+                "subj_end": 0,
+                "obj_start": 0,
+                "obj_end": 0,
+                "subj_type": "no_entity",
+                "obj_type": "no_entity",
+                "stanford_pos": self.get_pos_tags(),
+                "stanford_ner": [tag.strip("BI-") for tag in self.get_bio_tags()],
+                "stanford_head": [],
+                "stanford_deprel": []
+            })
+        return tac_examples
+
+    def get_entity(self, start_token=None, end_token=None, value=None):
+        _entities = []
+        for e in self.entities.copy():
+            if e.start_token == start_token:
+                _entities.append(e)
+            elif e.end_token == end_token:
+                _entities.append(e)
+            elif e.value == value:
+                _entities.append(e)
+        return _entities
 
     def get_length(self):
         return len(self.tokens)
@@ -154,7 +214,7 @@ class InputExample:
         return len(self.relations)
 
     def get_entities(self):
-        return self.entities
+        return self._get_entities()
 
     def _get_entities(self):
         entities = []
@@ -204,6 +264,7 @@ class InputExample:
         return self.relations
 
     def _get_relations(self):
+
         relations = []
 
         for token in self.tokens:
@@ -227,21 +288,24 @@ class InputExample:
                         relations.append(rel)
         return relations
 
+    def get_tokens(self):
+        return [token.text for token in self.tokens]
+
     def get_text(self):
         tokens = [token.text for token in self.tokens]
         return " ".join(tokens)
 
     def get_bio_tags(self):
         bio_tags = [token.bio_tag for token in self.tokens]
-        return " ".join(bio_tags)
+        return bio_tags
 
     def get_pos_tags(self):
         pos_tags = [token.pos_tag for token in self.tokens]
-        return " ".join(pos_tags)
+        return pos_tags
 
     def get_chunking_tags(self):
         chunking_tags = [token.chunking_tag for token in self.tokens]
-        return " ".join(chunking_tags)
+        return chunking_tags
 
     def __str__(self):
         text = self.get_text()

@@ -93,3 +93,9 @@ class TaggerBase:
 
     def run(self, text: Text, **kwargs):
         NotImplementedError()
+
+    def save(self, model_dir):
+        NotImplementedError()
+
+    def load(self, model_dir):
+        NotImplementedError()

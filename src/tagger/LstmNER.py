@@ -15,7 +15,7 @@ from src.tagger.dataset_reader import CoNLLDatasetReader
 from src.tagger.model import CRFTagger
 from src.utils.utils import load_json, write_json
 from src.utils.utils import load_yaml, write_yaml
-
+from src.tagger.utils.utils import convert_bio_to_entities, convert_entities_to_bio
 
 from allennlp.training.util import evaluate
 from allennlp.data.dataset_readers import DatasetReader
@@ -68,8 +68,10 @@ class LstmNER(TaggerBase):
         instance = self.dataset_reader.text_to_instance(text)
         output = self.model.forward_on_instance(instance)
         tags = output["tags"]
-        kwargs["tags"] = tags
+        entities = convert_bio_to_entities(text=text, bio=tags)
         kwargs["text"] = text
+        kwargs["tags"] = tags
+        kwargs["entities"] = entities
         return kwargs
 
     def train(

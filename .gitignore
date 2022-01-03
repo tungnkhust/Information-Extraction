@@ -132,3 +132,6 @@ dmypy.json
 /report
 /pre-trained
 test.py
+/wandb
+/runs
+data/CoNLL04/conll04_formatted_tacred.json

@@ -4,6 +4,8 @@ from typing import Union, Text, List
 import logging
 from collections import Counter
 
+from src.utils.utils import write_json, load_json
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -52,3 +54,42 @@ class BaseReader:
         for example in self.get_examples(split):
             relations.extend(example.get_relations())
         return relations
+
+    def get_bio_list(self):
+        label_list = []
+        for example in self.examples["train"]:
+            bio_tags = example.get_bio_tags()
+            for tag in bio_tags:
+                if tag not in label_list:
+                    label_list.append(tag)
+
+        for example in self.examples["dev"]:
+            bio_tags = example.get_bio_tags()
+            for tag in bio_tags:
+                if tag not in label_list:
+                    label_list.append(tag)
+
+        for example in self.examples["test"]:
+            bio_tags = example.get_bio_tags()
+            for tag in bio_tags:
+                if tag not in label_list:
+                    label_list.append(tag)
+
+        label_list.sort()
+
+        return label_list
+
+    def to_tacred(self, examples):
+        tar_examples = []
+        for example in examples:
+            tar_example = example.to_tacred()
+            if isinstance(tar_example, list):
+                tar_examples.extend(tar_example)
+            else:
+                tar_examples.append(tar_example)
+        return tar_examples
+
+    def save(self, output_path, split="train", format="tacred"):
+        if format.lower() == "tacred":
+            examples = self.to_tacred(self.get_examples(split))
+            write_json(examples, output_path)

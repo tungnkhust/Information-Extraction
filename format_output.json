@@ -1,0 +1,15 @@
+{
+    "text": "In Indiana , downed tree limbs interrupted power in parts of Indianapolis .",
+    "ner_tags": ["O", "B-Loc", "O", "O", "O", "O", "O", "O", "O", "O", "O", "B-Loc", "O"],
+    "entities": [
+        {"entity": "Loc", "value": "Indiana", "start_token": 1, "end_token": 1},
+        {"entity": "Loc", "value": "Indianapolis", "start_token": 11, "end_token": 11}
+    ],
+    "relations": [
+        {
+            "source_entity":  {"entity": "Loc", "value": "Indiana", "start_token": 1, "end_token": 1},
+            "target_entity": {"entity": "Loc", "value": "Indianapolis", "start_token": 11, "end_token": 11},
+            "relation": "Located_In"
+        }
+    ]
+}
