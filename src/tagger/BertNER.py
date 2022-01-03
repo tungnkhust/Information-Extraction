@@ -153,6 +153,7 @@ class BertNER(TaggerBase):
             self,
             train_dataset,
             eval_dataset,
+            test_dataset=None,
             output_dir=None,
             learning_rate=0.001,
             weight_decay=0.01,
@@ -190,19 +191,25 @@ class BertNER(TaggerBase):
             data_collator=data_collator,
             compute_metrics=self.compute_metrics
         )
-        trainer.save_model()
 
         train_result = trainer.train()
-        train_metrics = train_result.metrics
-        trainer.log_metrics("train", train_metrics)
-        trainer.save_metrics("train", train_metrics)
-        trainer.save_state()
 
-        eval_metrics = trainer.evaluate()
-        trainer.log_metrics("eval", eval_metrics)
-        trainer.save_metrics("eval", eval_metrics)
-        self.tokenizer.save_pretrained(output_dir)
-        return train_result
+        if output_dir:
+            train_metrics = train_result.metrics
+            trainer.log_metrics("train", train_metrics)
+            trainer.save_metrics("train", train_metrics)
+            trainer.save_state()
+
+            eval_metrics = trainer.evaluate()
+            trainer.log_metrics("eval", eval_metrics)
+            trainer.save_metrics("eval", eval_metrics)
+            self.tokenizer.save_pretrained(output_dir)
+            self.model.save_pretrained(output_dir)
+            return train_result
+
+        if test_dataset:
+            test_result = trainer.evaluate(eval_dataset=test_dataset, metric_key_prefix="test")
+            print(test_result)
 
     def save(self, model_dir):
         self.model.save_pretrained(model_dir)

@@ -53,9 +53,20 @@ if __name__ == '__main__':
         label2idx=label2idx
     )
 
+    test_examples = reader.get_examples("test")
+    if test_examples:
+        test_dataset = Conll2003Dataset(
+            tokenizer=tokenizer,
+            examples=test_examples,
+            label2idx=label2idx
+        )
+    else:
+        test_dataset = None
+
     ner.train(
         train_dataset=train_dataset,
         eval_dataset=dev_dataset,
+        test_dataset=test_dataset,
         num_epochs=args.num_epochs,
         batch_size=args.batch_size,
         output_dir=args.output_dir,
