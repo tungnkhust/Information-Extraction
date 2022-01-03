@@ -26,7 +26,9 @@ class TaggerBase:
 
         for example in tqdm(examples):
             text = example.get_text()
-            true_tag = example.get_bio_tags().split(' ')
+            true_tag = example.get_bio_tags()
+            if isinstance(true_tag, str):
+                true_tag = true_tag.split(' ')
             output = self.run(text)
             pred_tag = output["tags"]
 
