@@ -33,7 +33,6 @@ class BertNER(TaggerBase):
             task_name="ner"
     ):
         self.label2idx = label2idx
-
         if model_name_or_path:
             if label2idx:
                 config = AutoConfig.from_pretrained(
@@ -58,6 +57,8 @@ class BertNER(TaggerBase):
             self.tokenizer = None
 
         self.max_seq_length = max_seq_length
+
+        self.label_list = list(self.model.config.label2id.keys())
 
         self.metric = load_metric("seqeval")
         self.task = "ner"
