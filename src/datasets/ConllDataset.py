@@ -102,7 +102,7 @@ class Conll2003Dataset(Dataset):
         return tokenized_inputs
 
     def __len__(self):
-        return len(self.features)
+        return len(self.examples)
 
     def __getitem__(self, i) -> Dict[str, torch.Tensor]:
         # Convert to Tensors and build dataset
