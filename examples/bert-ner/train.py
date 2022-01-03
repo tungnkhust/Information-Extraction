@@ -16,6 +16,7 @@ if __name__ == '__main__':
     parser.add_argument("-bs", "--batch_size", type=int, default=2)
     parser.add_argument("-epoch", "--num_epochs", type=int, default=2)
     parser.add_argument("-wd", "--weight_decay", type=float, default=0.01)
+    parser.add_argument("-lr", "--learning_rate", type=float, default=0.01)
     parser.add_argument("--max_grad_norm", type=int, default=1.0)
     parser.add_argument("--evaluation_strategy", type=str, default="epoch")
     parser.add_argument("--save_strategy", type=str, default="no")
