@@ -7,7 +7,7 @@ import datasets
 import transformers
 from transformers import AutoModel, AutoConfig
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
-from transformers import DataCollatorForTokenClassification
+from transformers import DataCollatorWithPadding
 from transformers import PreTrainedTokenizerFast, PreTrainedTokenizer
 from transformers import Trainer, HfArgumentParser, TrainingArguments
 from transformers import set_seed
@@ -161,7 +161,7 @@ class BertRelCLF(RelBase):
             fp16=fp16
         )
 
-        data_collator = DataCollatorForTokenClassification(self.tokenizer)
+        data_collator = DataCollatorWithPadding(self.tokenizer)
 
         trainer = Trainer(
             model=self.model,
