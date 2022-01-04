@@ -33,9 +33,9 @@ if __name__ == '__main__':
         dev_path=args.dev_path,
         test_path=args.test_path
     )
-    bio_tags = reader.get_bio_list()
+    label_list = reader.get_relation_list()
 
-    label2idx = {value: key for key, value in enumerate(bio_tags)}
+    label2idx = {value: key for key, value in enumerate(label_list)}
 
     ner = BertRelCLF(
         model_name_or_path=model_name_or_path,
