@@ -1,11 +1,13 @@
 import os
 import ast
+import pathlib
 from typing import Union, Text, List
 from pathlib import Path
 from collections import Counter
 
 from src.schema import InputExample, Token
 from src.data_reader import BaseReader
+from src.utils.utils import load_json, write_json
 
 
 class CoNLLReader(BaseReader):
@@ -41,13 +43,7 @@ class CoNLLReader(BaseReader):
             rel_indies=rel_indies
         )
 
-    def _load_examples(self, file_path: Union[Text, Path], **kwargs) -> List[InputExample]:
-        if file_path is None:
-            return []
-
-        if os.path.exists(file_path) is False:
-            return []
-
+    def read_txt(self, file_path):
         examples = []
 
         with open(file_path, 'r') as pf:
@@ -71,6 +67,61 @@ class CoNLLReader(BaseReader):
 
             example = InputExample(id=example_id, tokens=tokens, rel_in=self.rel_in)
             examples.append(example)
+        return examples
+
+    def read_json(self, file_path):
+        data = load_json(file_path)
+        examples = []
+        for sample in data:
+            _tokens = sample["tokens"]
+            _entities = sample["entities"]
+            _relations = sample["relations"]
+            _sample_id = sample["orig_id"]
+
+            entities = []
+            for e in _entities:
+                entity = {
+                    "entity": e["type"],
+                    "start_token": e["start"],
+                    "end_token": e["end"],
+                    "value": " ".join(_tokens[e["start"]: e["end"]])
+                }
+                entities.append(entity)
+
+            relations = []
+            for r in _relations:
+                relation = {
+                    "source_entity": entities[r["head"]],
+                    "target_entity": entities[r["tail"]],
+                    "relation": r["type"]
+                }
+                relations.append(relation)
+            input_example = InputExample.from_dict(
+                {
+                    "id": _sample_id,
+                    "tokens": _tokens,
+                    "entities": entities,
+                    "relations": relations
+                }
+            )
+            examples.append(input_example)
+        return examples
+
+    def _load_examples(self, file_path: Union[Text, Path, List], **kwargs) -> List[InputExample]:
+        if file_path is None:
+            return []
+
+        if isinstance(file_path, List) is False:
+            file_path = [file_path]
+
+        examples = []
+
+        for file in file_path:
+            if os.path.exists(file):
+                if file.endswith(".txt"):
+                    examples.extend(self.read_txt(file))
+                elif file.endswith(".json"):
+                    examples.extend(self.read_json(file))
         return examples
 
     def get_dataset(self, split: Text = None, **kwargs):

@@ -15,7 +15,7 @@ from src.tagger.dataset_reader import CoNLLDatasetReader
 from src.tagger.model import CRFTagger
 from src.utils.utils import load_json, write_json
 from src.utils.utils import load_yaml, write_yaml
-from src.tagger.utils.utils import convert_bio_to_entities, convert_entities_to_bio
+from src.utils.utils import convert_bio_to_entities, convert_entities_to_bio
 
 from allennlp.training.util import evaluate
 from allennlp.data.dataset_readers import DatasetReader

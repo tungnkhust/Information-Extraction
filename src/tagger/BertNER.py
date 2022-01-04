@@ -19,7 +19,7 @@ import numpy as np
 from src.tagger import TaggerBase
 from src.data_reader import CoNLLReader
 from src.datasets.ConllDataset import Conll2003Dataset
-from src.tagger.utils.utils import convert_entities_to_bio
+from src.utils.utils import convert_entities_to_bio
 
 
 class BertNER(TaggerBase):

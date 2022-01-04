@@ -1,7 +1,7 @@
 import os
 
 
-class RelCLR:
+class RelBase:
     def train(self, **kwargs):
         NotImplementedError()
 

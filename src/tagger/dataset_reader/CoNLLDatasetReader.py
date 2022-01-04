@@ -1,5 +1,5 @@
 from src.data_reader import CoNLLReader
-from src.schema import InputExample
+from src.schema.schema import InputExample
 from typing import Dict, Optional, List, Text, Sequence, Iterable
 
 from allennlp.data import DatasetReader
@@ -33,7 +33,9 @@ class CoNLLDatasetReader(DatasetReader):
     def _read(self, examples: List[InputExample]) -> Iterable[Instance]:
         for example in examples:
             text = example.get_text()
-            ner_tags = example.get_bio_tags().split(" ")
+            ner_tags = example.get_bio_tags()
+            if isinstance(ner_tags, str):
+                ner_tags = ner_tags.split(" ")
             yield self.text_to_instance(text, ner_tags)
 
     def text_to_instance(

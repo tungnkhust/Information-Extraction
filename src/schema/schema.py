@@ -1,5 +1,7 @@
 from typing import Union, Text, List, Iterable, Any, Dict
 import logging
+from src.utils.utils import convert_entities_to_bio
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -77,12 +79,27 @@ class Entity:
         self.end_token = end_token
 
     def to_dict(self):
-        return {
+        entity = {
             "entity": self.entity,
             "value": self.value,
             "start_token": self.start_token,
             "end_token": self.end_token
         }
+        if self.start:
+            entity = {
+                "entity": self.entity,
+                "value": self.value,
+                "start_token": self.start_token,
+                "end_token": self.end_token,
+                "start": self.start,
+                "end": self.end
+            }
+
+        return entity
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(**data)
 
     def __str__(self):
         return str(self.to_dict())
@@ -134,6 +151,20 @@ class Relation:
     def get_pair_entity(self):
         return f'{self.source_entity.entity}-{self.target_entity.entity}#{self.relation}'
 
+    @classmethod
+    def from_dict(cls, data: Dict):
+        source_entity = Entity.from_dict(data["source_entity"])
+        target_entity = Entity.from_dict(data["target_entity"])
+        relation_label = data["relation"]
+        return cls(source_entity=source_entity, target_entity=target_entity, relation=relation_label)
+
+    def to_dict(self):
+        return {
+            "source_entity": self.source_entity.to_dict(),
+            "target_entity": self.target_entity.to_dict(),
+            "relation": self.relation
+        }
+
 
 class InputExample:
     def __init__(
@@ -141,7 +172,7 @@ class InputExample:
             id: Text = None,
             tokens: List[Token] = None,
             rel_in: Text = "end",
-            rel_in_tag: bool = True,
+            entities: List[Entity] = [],
             relations: List[Relation] = []
     ):
         self.entities = []
@@ -149,12 +180,47 @@ class InputExample:
         self.id = id
         self.rel_in = rel_in
         self.tokens = tokens if tokens else []
-        self.entities = self._get_entities()
 
-        if rel_in_tag:
-            self.relations = self._get_relations()
+        if entities:
+            self.entities = entities
         else:
+            self.entities = self._get_entities()
+
+        if relations:
             self.relations = relations
+        else:
+            self.relations = self._get_relations()
+
+    @classmethod
+    def from_dict(cls, data):
+        """
+        format:
+        {
+            "id": "",
+            "text": "",
+            "tokens": [],
+            "entities": [],
+            "relations": []
+        }
+        :return:
+        """
+        token_texts = data["tokens"]
+        text = " ".join(token_texts)
+        bio = convert_entities_to_bio(entities=data["entities"], text=text)
+        entities = [Entity.from_dict(e) for e in data["entities"]]
+
+        tokens = []
+        for i, word in enumerate(token_texts):
+            tokens.append(Token(text=word, bio_tag=bio[i]))
+
+        relations = [Relation.from_dict(r) for r in data["relations"]]
+
+        return cls(
+            id=data["id"],
+            tokens=tokens,
+            entities=entities,
+            relations=relations
+        )
 
     def to_tacred(self):
         tac_examples = []
