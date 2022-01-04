@@ -1,7 +1,8 @@
+import tokenize
 from typing import Union, Text, List, Iterable, Any, Dict
 import logging
 from src.utils.utils import convert_entities_to_bio
-
+from src.utils.utils import update_char_index_entity
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -175,8 +176,6 @@ class InputExample:
             entities: List[Entity] = [],
             relations: List[Relation] = []
     ):
-        self.entities = []
-        self.relations = []
         self.id = id
         self.rel_in = rel_in
         self.tokens = tokens if tokens else []
@@ -185,10 +184,19 @@ class InputExample:
             self.entities = entities
         else:
             self.entities = self._get_entities()
+        self._update_char_index_entity()
+
         if relations:
             self.relations = relations
         else:
             self.relations = self._get_relations()
+
+    def _update_char_index_entity(self):
+        entities = []
+        for e in self.entities:
+            entity = update_char_index_entity(e.to_dict(), self.get_tokens())
+            entities.append(Entity.from_dict(entity))
+        self.entities = entities
 
     @classmethod
     def from_dict(cls, data):
@@ -279,7 +287,7 @@ class InputExample:
         return len(self.relations)
 
     def get_entities(self):
-        return self.entities
+        return [e.to_dict() for e in self.entities]
 
     def _get_entities(self):
         entities = []
@@ -326,7 +334,7 @@ class InputExample:
         return None
 
     def get_relations(self):
-        return self.relations
+        return [rel.to_dict() for rel in self.relations]
 
     def _get_relations(self):
 

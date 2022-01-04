@@ -2,6 +2,20 @@ import json
 import yaml
 
 
+def update_char_index_entity(entity, tokens):
+    text = " ".join(tokens)
+    # get index start words
+    char_ids = [0]
+    temp = 0
+    for i in range(1, len(tokens)):
+        char_ids.append(temp + len(tokens[i - 1]) + 1)
+        temp = char_ids[-1]
+    char_ids.append(len(text) + 1)
+    entity["start"] = char_ids[entity["start_token"]]
+    entity["end"] = char_ids[entity["end_token"]]
+    return entity
+
+
 def convert_entities_to_bio(entities, text):
     list_text_label = []
     tokens = text.split(" ")

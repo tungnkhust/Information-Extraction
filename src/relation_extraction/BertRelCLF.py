@@ -5,7 +5,7 @@ from datasets import ClassLabel, load_dataset, load_metric
 import datasets
 
 import transformers
-from transformers import AutoModel, AutoConfig
+from transformers import AutoModel, AutoConfig, BertConfig
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from transformers import DataCollatorWithPadding, DataCollator
 from transformers import PreTrainedTokenizerFast, PreTrainedTokenizer
@@ -28,17 +28,9 @@ class BertRelCLF(RelBase):
             label2idx: Dict = None,
             max_seq_length: int = 512,
             device: str = None,
-            entity_marker: Union[Text, EntityMarker] = None
+            marker_mode: Text = None
     ):
         self.label2idx = label2idx
-        if entity_marker:
-            if isinstance(entity_marker, str):
-                self.entity_marker = EntityMarker(marker_mode=entity_marker)
-            else:
-                self.entity_marker = entity_marker
-        else:
-            self.entity_marker = EntityMarker(marker_mode="entity")
-
         if model_name_or_path:
             if label2idx:
                 config = AutoConfig.from_pretrained(
@@ -47,12 +39,23 @@ class BertRelCLF(RelBase):
                     label2id=label2idx,
                     id2label={i: l for l, i in label2idx.items()}
                 )
+
+                if "marker_mode" in config.to_dict():
+                    marker_mode = config.marker_mode
+                else:
+                    if marker_mode is None:
+                        marker_mode = "entity"
+                    config.update({"marker_mode": marker_mode})
+
                 self.model = AutoModelForSequenceClassification.from_pretrained(
                     model_name_or_path,
                     config=config
                 )
             else:
                 self.model = AutoModelForSequenceClassification.from_pretrained(model_name_or_path)
+                marker_mode = self.model.config.marker_mode
+
+        self.entity_marker = EntityMarker(marker_mode=marker_mode)
 
         if tokenizer:
             self.tokenizer = tokenizer

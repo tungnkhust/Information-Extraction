@@ -65,8 +65,12 @@ class RelDataset(Dataset):
             trg_entity = trg_entity.to_dict()
 
         for rel in relations:
-            _src = rel.source_entity.to_dict()
-            _trg = rel.target_entity.to_dict()
+            if isinstance(rel, Relation):
+                _src = rel.source_entity.to_dict()
+                _trg = rel.target_entity.to_dict()
+            else:
+                _src = rel["source_entity"]
+                _trg = rel["target_entity"]
 
             if src_entity["entity"] == _src["entity"] and trg_entity["entity"] == _trg["entity"]:
                 if src_entity["start_token"] == _src["start_token"] or src_entity["end_token"] == _src["start_token"]:
@@ -84,8 +88,8 @@ class RelDataset(Dataset):
             _relations = example.get_relations()
             for i in range(len(entities)):
                 for j in range(i+1, len(entities)):
-                    src_e = entities[i].to_dict()
-                    trg_e = entities[j].to_dict()
+                    src_e = entities[i]
+                    trg_e = entities[j]
                     if self.check_is_relation(src_entity=src_e, trg_entity=trg_e, relations=_relations) is False:
                         relations.append({
                             "tokens": tokens,
@@ -117,7 +121,6 @@ class RelDataset(Dataset):
         trg_entity = relation["target_entity"]
 
         rel_label = self.label2idx[relation["relation"]]
-
         tokens = self.marker.mark(tokens=tokens, src_entity=src_entity, trg_entity=trg_entity)
         text = " ".join(tokens)
         tokenized_inputs = self.tokenizer(text, truncation=True, max_length=self.max_length, padding=self.padding)

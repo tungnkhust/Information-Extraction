@@ -82,24 +82,23 @@ class BaseReader:
     def get_relation_list(self):
         label_list = ["no_relation"]
         for example in self.examples["train"]:
-            relations = example.get_relations()
+            relations = example.relations
             for rel in relations:
-                if rel.relation not in label_list:
+                if rel not in label_list:
                     label_list.append(rel.relation)
 
         for example in self.examples["dev"]:
-            relations = example.get_relations()
+            relations = example.relations
             for rel in relations:
                 if rel.relation not in label_list:
                     label_list.append(rel.relation)
 
         for example in self.examples["test"]:
-            relations = example.get_relations()
+            relations = example.relations
             for rel in relations:
                 if rel.relation not in label_list:
                     label_list.append(rel.relation)
-
-        label_list.sort()
+        label_list = sorted(set(label_list))
 
         return label_list
 

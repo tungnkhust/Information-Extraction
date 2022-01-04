@@ -7,10 +7,17 @@ import copy
 import os
 from src.evaluation.utils import plot_confusion_matrix, Column
 from src.evaluation.TagEvaluation import compare_entity
+from src.schema import Entity, Relation
 ROOT_PATH = sys.path[1]
 
 
 def compare_relation(rel1, rel2, has_direction=False):
+    if isinstance(rel1, Relation):
+        rel1 = rel1.to_dict()
+
+    if isinstance(rel2, Relation):
+        rel2 = rel2.to_dict()
+
     src_e_1 = rel1["source_entity"]
     trg_e_1 = rel1["target_entity"]
     label1 = rel1["relation"]

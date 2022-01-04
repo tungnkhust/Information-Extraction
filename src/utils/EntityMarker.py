@@ -1,4 +1,5 @@
 from typing import Text, Dict, List, Union
+from src.schema import Entity
 
 
 class EntityMarker():
@@ -6,6 +7,12 @@ class EntityMarker():
         self.marker_mode = marker_mode
 
     def mark(self, tokens: List, src_entity, trg_entity, mode=None):
+        if isinstance(src_entity, Entity):
+            src_entity = src_entity.to_dict()
+
+        if isinstance(trg_entity, Entity):
+            trg_entity = trg_entity.to_dict()
+
         if mode is None:
             mode = self.marker_mode
 

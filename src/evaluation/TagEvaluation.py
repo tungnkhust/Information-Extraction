@@ -6,6 +6,7 @@ from collections import Counter
 import copy
 import os
 from src.evaluation.utils import plot_confusion_matrix, Column
+from src.schema import Entity
 
 ROOT_PATH = sys.path[1]
 
@@ -50,7 +51,7 @@ def get_entity_from_BIO(tags: List[str], tokens: List = None) -> List:
     return entities
 
 
-def compare_entity(e_true: dict, e_pred: dict):
+def compare_entity(e_true, e_pred):
     """
     Compare 2 entities:
     Have 5 state of two entities:
@@ -64,10 +65,23 @@ def compare_entity(e_true: dict, e_pred: dict):
     :param e_pred: Entity in predicted label.
     :return:
     """
-    s1 = int(e_true['start'])
-    e1 = int(e_true['end'])
-    s2 = int(e_pred['start'])
-    e2 = int(e_pred['end'])
+    if isinstance(e_true, Entity):
+        e_true = e_true.to_dict()
+
+    if isinstance(e_pred, Entity):
+        e_pred = e_pred.to_dict()
+
+    try:
+        s1 = int(e_true['start'])
+        e1 = int(e_true['end'])
+        s2 = int(e_pred['start'])
+        e2 = int(e_pred['end'])
+    except:
+        s1 = int(e_true['start_token'])
+        e1 = int(e_true['end_token'])
+        s2 = int(e_pred['start_token'])
+        e2 = int(e_pred['end_token'])
+
     if s1 == s2 and e1 == e2:
         if e_true['entity'] == e_pred['entity']:
             return 1
