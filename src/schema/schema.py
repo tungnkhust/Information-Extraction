@@ -185,7 +185,6 @@ class InputExample:
             self.entities = entities
         else:
             self.entities = self._get_entities()
-
         if relations:
             self.relations = relations
         else:
@@ -337,8 +336,8 @@ class InputExample:
             for i, rel_tag in enumerate(token.rel_tags):
                 if rel_tag != 'N':
                     if self.rel_in == "end":
-                        source_entity = self.find_entity(end_token=token.index)
-                        target_entity = self.find_entity(end_token=token.rel_indies[i])
+                        source_entity = self.find_entity(end_token=token.index+1)
+                        target_entity = self.find_entity(end_token=token.rel_indies[i]+1)
                     elif self.rel_in == "begin":
                         source_entity = self.find_entity(start_token=token.index)
                         target_entity = self.find_entity(start_token=token.rel_indies[i])

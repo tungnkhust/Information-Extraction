@@ -14,8 +14,8 @@ if __name__ == '__main__':
     parser.add_argument("-test", "--test_path", default="data/CoNLL04/test.txt")
     parser.add_argument("-out", "--output_dir", default="./models/bert-rel")
     parser.add_argument("-len", "--max_seq_length", type=int, default=256)
-    parser.add_argument("-bs", "--batch_size", type=int, default=64)
-    parser.add_argument("-epoch", "--num_epochs", type=int, default=10)
+    parser.add_argument("-bs", "--batch_size", type=int, default=2)
+    parser.add_argument("-epoch", "--num_epochs", type=int, default=2)
     parser.add_argument("-wd", "--weight_decay", type=float, default=0.0001)
     parser.add_argument("-lr", "--learning_rate", type=float, default=5e-5)
     parser.add_argument("--max_grad_norm", type=int, default=1.0)
@@ -36,6 +36,7 @@ if __name__ == '__main__':
     label_list = reader.get_relation_list()
 
     label2idx = {value: key for key, value in enumerate(label_list)}
+    print(label2idx)
 
     ner = BertRelCLF(
         model_name_or_path=model_name_or_path,
