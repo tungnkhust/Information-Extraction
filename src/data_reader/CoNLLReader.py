@@ -104,6 +104,8 @@ class CoNLLReader(BaseReader):
                     "relations": relations
                 }
             )
+            print(input_example.get_text())
+            print(input_example.get_entities())
             examples.append(input_example)
         return examples
 

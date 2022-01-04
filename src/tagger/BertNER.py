@@ -18,7 +18,7 @@ import numpy as np
 
 from src.tagger import TaggerBase
 from src.data_reader import CoNLLReader
-from src.datasets.ConllDataset import Conll2003Dataset
+from src.datasets.TagDataset import TagDataset
 from src.utils.utils import convert_entities_to_bio
 
 

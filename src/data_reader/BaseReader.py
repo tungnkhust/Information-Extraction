@@ -79,6 +79,30 @@ class BaseReader:
 
         return label_list
 
+    def get_relation_list(self):
+        label_list = ["no_relation"]
+        for example in self.examples["train"]:
+            relations = example.get_relations()
+            for rel in relations:
+                if rel.relation not in label_list:
+                    label_list.append(rel.relation)
+
+        for example in self.examples["dev"]:
+            relations = example.get_relations()
+            for rel in relations:
+                if rel.relation not in label_list:
+                    label_list.append(rel.relation)
+
+        for example in self.examples["test"]:
+            relations = example.get_relations()
+            for rel in relations:
+                if rel.relation not in label_list:
+                    label_list.append(rel.relation)
+
+        label_list.sort()
+
+        return label_list
+
     def to_tacred(self, examples):
         tar_examples = []
         for example in examples:

@@ -210,11 +210,11 @@ def precision_score(y_true: List[List], y_pred: List[List], epsilon=1e-6, soft_e
     scores = get_metrics(y_true, y_pred)
     metrics = scores["metrics"]
 
-    act = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['spu']
+    n_predict = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['spu']
     if soft_eval is True:
-        precision = (metrics['cor'] + metrics['par'] + epsilon) / (act + epsilon)
+        precision = (metrics['cor'] + metrics['par'] + epsilon) / (n_predict + epsilon)
     else:
-        precision = (metrics['cor'] + epsilon) / (act + epsilon)
+        precision = (metrics['cor'] + epsilon) / (n_predict + epsilon)
     return precision
 
 
@@ -229,11 +229,11 @@ def recall_score(y_true: List[List], y_pred: List[List], epsilon=1e-6, soft_eval
     scores = get_metrics(y_true, y_pred)
     metrics = scores["metrics"]
 
-    pos = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['mis']
+    n_truth = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['mis']
     if soft_eval is True:
-        recall = (metrics['cor'] + metrics['par'] + epsilon)/(pos+epsilon)
+        recall = (metrics['cor'] + metrics['par'] + epsilon)/(n_truth+epsilon)
     else:
-        recall = (metrics['cor']+epsilon)/(pos+epsilon)
+        recall = (metrics['cor']+epsilon)/(n_truth+epsilon)
     return recall
 
 
@@ -248,14 +248,14 @@ def f1_score(y_true: List[List], y_pred: List[List], epsilon=1e-6, soft_eval=Fal
     scores = get_metrics(y_true, y_pred)
     metrics = scores["metrics"]
 
-    act = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['spu']
-    pos = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['mis']
+    n_predict = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['spu']
+    n_truth = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['mis']
     if soft_eval is True:
-        precision = (metrics['cor'] + metrics['par'] + epsilon)/(act+epsilon)
-        recall = (metrics['cor'] + metrics['par'] + epsilon)/(pos+epsilon)
+        precision = (metrics['cor'] + metrics['par'] + epsilon)/(n_predict+epsilon)
+        recall = (metrics['cor'] + metrics['par'] + epsilon)/(n_truth+epsilon)
     else:
-        precision = (metrics['cor']+epsilon)/(act+epsilon)
-        recall = (metrics['cor']+epsilon)/(pos+epsilon)
+        precision = (metrics['cor']+epsilon)/(n_predict+epsilon)
+        recall = (metrics['cor']+epsilon)/(n_truth+epsilon)
     f1_score = (2*precision*recall)/(precision + recall)
     return f1_score
 
@@ -266,6 +266,58 @@ class TagEvaluation:
             epsilon=10e-13
     ):
         self.epsilon = epsilon
+        self.cor = 0
+        self.inc = 0
+        self.mis = 0
+        self.spu = 0
+        self.par = 0
+        self.support = 0
+
+    def get_metrics(self, soft_eval=False):
+        metrics = {}
+        n_predict = self.cor + self.inc + self.par + self.spu
+        n_truth = self.cor + self.inc + self.par + self.mis
+
+        precision = (self.cor + self.epsilon) / (n_predict + self.epsilon)
+        recall = (self.cor + self.epsilon) / (n_truth + self.epsilon)
+        f1_score = (2 * precision * recall) / (precision + recall)
+
+        metrics["precision"] = precision
+        metrics["recall"] = recall
+        metrics["f1"] = f1_score
+
+        if soft_eval is True:
+            precision = (self.cor + self.par + self.epsilon) / (n_predict + self.epsilon)
+            recall = (self.cor + self.par + self.epsilon) / (n_truth + self.epsilon)
+            f1_score = (2 * precision * recall) / (precision + recall)
+            metrics["precision-soft"] = precision
+            metrics["recall-soft"] = recall
+            metrics["f1-soft"] = f1_score
+        return metrics
+
+    def run(
+            self,
+            true_tags: Union[List[Text], Text],
+            pred_tags: Union[List[Text], Text],
+            **kwargs
+    ):
+        if isinstance(true_tags, str):
+            true_tags = [tag.split(' ') for tag in true_tags]
+
+        if isinstance(pred_tags, str):
+            pred_tags = [tag.split(' ') for tag in pred_tags]
+
+        score = compute_score(true_tags, pred_tags)
+        metric = score["metric"]
+        self.cor += metric["cor"]
+        self.inc += metric["inc"]
+        self.par += metric["par"]
+        self.mis += metric["mis"]
+        self.spu += metric["spu"]
+        self.support += metric["support"]
+        kwargs["entities_score"] = metric
+
+        return kwargs
 
     @staticmethod
     def analyse_miss(missings):
@@ -326,17 +378,13 @@ class TagEvaluation:
 
     def evaluate(
             self,
-            true_tags: Union[List[Text], Text],
-            pred_tags: Union[List[Text], Text],
+            true_tags: List[List],
+            pred_tags: List[List],
             epsilon=1e-5,
             soft_eval=False,
-            result_dir="report/ner"
+            result_dir="report/ner",
+            **kwargs
     ):
-        if isinstance(true_tags, str):
-            true_tags = [tag.split(' ') for tag in true_tags]
-
-        if isinstance(pred_tags, str):
-            pred_tags = [tag.split(' ') for tag in pred_tags]
 
         scores = get_metrics(true_tags, pred_tags)
         metrics = scores["metrics"]
@@ -345,17 +393,17 @@ class TagEvaluation:
         missings = scores["missings"]
         spuriuses = scores["spuriuses"]
 
-        act = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['spu']
+        n_predict = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['spu']
         if soft_eval is True:
-            precision = (metrics['cor'] + metrics['par'] + epsilon) / (act + epsilon)
+            precision = (metrics['cor'] + metrics['par'] + epsilon) / (n_predict + epsilon)
         else:
-            precision = (metrics['cor'] + epsilon) / (act + epsilon)
-        pos = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['mis']
+            precision = (metrics['cor'] + epsilon) / (n_predict + epsilon)
+        n_truth = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['mis']
 
         if soft_eval is True:
-            recall = (metrics['cor'] + metrics['par'] + epsilon) / (pos + epsilon)
+            recall = (metrics['cor'] + metrics['par'] + epsilon) / (n_truth + epsilon)
         else:
-            recall = (metrics['cor'] + epsilon) / (pos + epsilon)
+            recall = (metrics['cor'] + epsilon) / (n_truth + epsilon)
         f1_score = (2 * precision * recall) / (precision + recall)
 
         count_cor = self.analyse_cor(corrects)

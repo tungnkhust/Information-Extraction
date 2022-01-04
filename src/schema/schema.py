@@ -280,7 +280,7 @@ class InputExample:
         return len(self.relations)
 
     def get_entities(self):
-        return self._get_entities()
+        return self.entities
 
     def _get_entities(self):
         entities = []
@@ -292,7 +292,7 @@ class InputExample:
             if token.bio_tag[0] == "B":
                 if i > 0 and self.tokens[i-1].bio_tag[0] != "O":
                     value = " ".join([t.text for t in self.tokens][s:e + 1])
-                    ent = Entity(entity=entity, value=value, start_token=s, end_token=e)
+                    ent = Entity(entity=entity, value=value, start_token=s, end_token=e + 1)
                     entities.append(ent)
 
                 s = i
@@ -301,19 +301,19 @@ class InputExample:
 
                 if i == len(self.tokens) - 1:
                     value = " ".join([t.text for t in self.tokens][s:e + 1])
-                    ent = Entity(entity=entity, value=value, start_token=s, end_token=e)
+                    ent = Entity(entity=entity, value=value, start_token=s, end_token=e + 1)
                     entities.append(ent)
 
             elif token.bio_tag[0] == "I":
                 e += 1
                 if i == len(self.tokens) - 1:
                     value = " ".join([t.text for t in self.tokens][s:e + 1])
-                    ent = Entity(entity=entity, value=value, start_token=s, end_token=e)
+                    ent = Entity(entity=entity, value=value, start_token=s, end_token=e + 1)
                     entities.append(ent)
             elif token.bio_tag[0] == "O":
                 if entity is not None:
                     value = " ".join([t.text for t in self.tokens][s:e + 1])
-                    ent = Entity(entity=entity, value=value, start_token=s, end_token=e)
+                    ent = Entity(entity=entity, value=value, start_token=s, end_token=e + 1)
                     entities.append(ent)
                     entity = None
 

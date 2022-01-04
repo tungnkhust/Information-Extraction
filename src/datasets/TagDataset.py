@@ -48,7 +48,7 @@ MODEL_CONFIG_CLASSES = list(MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING.keys())
 MODEL_TYPES = tuple(conf.model_type for conf in MODEL_CONFIG_CLASSES)
 
 
-class Conll2003Dataset(Dataset):
+class TagDataset(Dataset):
     """
     This will be superseded by a framework-agnostic approach soon.
     """
@@ -61,7 +61,7 @@ class Conll2003Dataset(Dataset):
             label_all_tokens: bool = True,
             mode: str = "train"
     ):
-        super(Conll2003Dataset, self).__init__()
+        super(TagDataset, self).__init__()
         self.examples = examples
         self.tokenizer = tokenizer
         self.label_all_tokens = label_all_tokens
