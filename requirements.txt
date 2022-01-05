@@ -10,3 +10,4 @@ neo4j
 neuralcoref==4.0
 allennlp==2.7.0
 seqeval==1.2.2
+dotenv

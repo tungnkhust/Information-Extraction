@@ -1,0 +1,29 @@
+VERSION: v0.0.1
+
+LANGUAGE: en
+
+GENERAL:
+  model_dir: ./models
+
+PIPELINE:
+  COREF: null
+
+#  NER:
+#    name: BertNER
+#    package: src.tagger.BertNER
+#    params:
+#      model_name_or_path: models/bert-ner
+
+  NER:
+    name: LstmNER
+    package: src.tagger.LstmNER
+    params:
+      model_name_or_path: models/lstm-ner
+
+  REL:
+    name: BertRelCLF
+    package: src.relation_extraction.BertRelCLF
+    params:
+      model_name_or_path: models/bert-rel
+
+

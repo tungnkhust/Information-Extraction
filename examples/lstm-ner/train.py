@@ -8,7 +8,7 @@ from argparse import ArgumentParser
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument("-c", "--config_path", default="examples/lstm-ner/config.yaml")
+    parser.add_argument("-c", "--config_path", default="examples/lstm-ner/pipeline_config.yaml")
     parser.add_argument("-rm_metric", "--rm_metric", default=False, action="store_true")
 
     args = parser.parse_args()

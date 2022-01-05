@@ -101,3 +101,7 @@ class TaggerBase:
 
     def load(self, model_dir):
         NotImplementedError()
+
+    @classmethod
+    def from_pretrained(cls, model_name_or_path: Text, **kwargs):
+        NotImplementedError()

@@ -106,19 +106,24 @@ class BertNER(TaggerBase):
     def run(self, text: Text, **kwargs):
         output = self.inferencer(text)
         entity = output[0]["entity"]
-        s = output[0]["start"]
-        e = output[0]["end"]
+        s = int(output[0]["start"])
+        e = int(output[0]["end"])
+
         entities = []
         for i, token in enumerate(output[1:]):
             if 'B-' in token["entity"]:
-                entities.append({"entity": entity[2:], "start": s, "end": e, "value": text[s:e]})
+                entities.append({"entity": entity[2:], "start": int(s), "end": int(e), "value": text[s:e]})
                 s = token["start"]
                 e = token["end"]
                 entity = token["entity"]
+
+                if i == len(output) - 2:
+                    entities.append({"entity": entity[2:], "start": int(s), "end": int(e), "value": text[s:e]})
+
             elif "I-" in token["entity"]:
                 e = token["end"]
                 if i == len(output) - 2:
-                    entities.append({"entity": entity[2:], "start": s, "end": e, "value": text[s:e]})
+                    entities.append({"entity": entity[2:], "start": int(s), "end": int(e), "value": text[s:e]})
 
         tags = convert_entities_to_bio(entities=entities, text=text)
         kwargs["text"] = text
@@ -213,3 +218,7 @@ class BertNER(TaggerBase):
 
     def save(self, model_dir):
         self.model.save_pretrained(model_dir)
+
+    @classmethod
+    def from_pretrained(cls, model_name_or_path: Text, **kwargs):
+        return cls(model_name_or_path=model_name_or_path, **kwargs)

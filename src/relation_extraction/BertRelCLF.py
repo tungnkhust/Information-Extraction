@@ -82,6 +82,7 @@ class BertRelCLF(RelBase):
     def run(self, text: Text, entities: List, **kwargs):
         kwargs["text"] = text
         kwargs["entities"] = entities
+        kwargs["relations"] = []
 
         tokens = text.split(" ")
         if len(entities) < 2:
@@ -101,7 +102,7 @@ class BertRelCLF(RelBase):
                     "source_entity": src_e,
                     "target_entity": trc_e,
                     "relation": rel_label,
-                    "score": score
+                    "score": float(score)
                 }
                 relations.append(relation)
         else:
@@ -195,6 +196,10 @@ class BertRelCLF(RelBase):
 
         return train_result
 
-    def save(self, model_dir):
+    def save(self, model_dir, **kwargs):
         self.model.save_pretrained(model_dir)
         self.tokenizer.save_pretrained(model_dir)
+
+    @classmethod
+    def from_pretrained(cls, model_name_or_path: Text, **kwargs):
+        return cls(model_name_or_path=model_name_or_path, **kwargs)

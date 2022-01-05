@@ -1,0 +1,23 @@
+VERSION: v0.0.1
+
+LANGUAGE: en
+
+GENERAL:
+  model_dir: ./models
+
+PIPELINE:
+  COREF: null
+  NER:
+    name: BertNER
+    package: src.tagger.BertNER
+    params:
+      model_name_or_path: models/bert-ner
+      max_seq_length: 256
+  REL:
+    name: BertRelCLF
+    package: src.relation_extraction.BertRelCLF
+    params:
+      model_name_or_path: models/bert-rel
+      max_seq_length: 256
+
+

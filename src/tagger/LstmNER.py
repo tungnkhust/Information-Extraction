@@ -347,11 +347,12 @@ class LstmNER(TaggerBase):
         )
 
     @classmethod
-    def from_pretrained(cls, model_dir: Text):
-        config_path = os.path.join(model_dir, "config.json")
+    def from_pretrained(cls, model_name_or_path: Text, **kwargs):
+        assert os.path.isdir(model_name_or_path)
+        config_path = os.path.join(model_name_or_path, "config.json")
         config_path = os.path.abspath(config_path)
         config = load_json(config_path)
-        vocab_dir = os.path.join(model_dir, "vocabulary")
+        vocab_dir = os.path.join(model_name_or_path, "vocabulary")
         config["VOCAB"]["vocabulary_dir"] = vocab_dir
-        weight_path = os.path.join(model_dir, "best.th")
+        weight_path = os.path.join(model_name_or_path, "best.th")
         return cls.from_config(config=config, weight_path=weight_path)

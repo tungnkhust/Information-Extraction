@@ -42,3 +42,13 @@ class RelBase:
             }
         """
         NotImplementedError()
+
+    def save(self, model_dir: Text, **kwargs):
+        NotImplementedError()
+
+    def load(self, model_dir: Text, **kwargs):
+        NotImplementedError()
+
+    @classmethod
+    def from_pretrained(cls, model_name_or_path: Text, **kwargs):
+        NotImplementedError()
