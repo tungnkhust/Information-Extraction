@@ -3,16 +3,10 @@ import yaml
 
 
 def update_word_index_entity(entity, text):
-    tokens = text.split(' ')
-    char_to_word = dict()
-    char_to_word[0] = 0
-    temp = 0
-    for i in range(1, len(tokens)):
-        temp = temp + len(tokens[i - 1]) + 1
-        char_to_word[temp] = i
-    char_to_word[len(text)+1] = len(tokens)
-    entity["start_token"] = char_to_word[entity["start"]]
-    entity["end_token"] = char_to_word[entity["end"] + 1]
+    start_token = len(text[:entity["start"]].strip(" ").split(" "))
+    end_token = len(text[:entity["end"]].strip(" ").split(" "))
+    entity["start_token"] = start_token
+    entity["end_token"] = end_token
 
     return entity
 
