@@ -105,7 +105,6 @@ class BertNER(TaggerBase):
 
     def run(self, text: Text, **kwargs):
         output = self.inferencer(text)
-        print(output)
         entity = output[0]["entity"]
         s = int(output[0]["start"])
         e = int(output[0]["end"])
