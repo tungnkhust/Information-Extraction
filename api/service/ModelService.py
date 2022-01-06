@@ -17,6 +17,22 @@ class ModelService:
 
     async def run(self, text: Text, **kwargs):
         output = self.pipeline.run(text)
+        entities = output["entities"]
+        e_index = {}
+        for i, e in enumerate(entities):
+            e_index[f'{e["start_token"]}-{e["end_token"]}'] = i
+
+        relations = output["relations"]
+
+        for rel in relations:
+            src_e = rel["source_entity"].copy()
+            trg_e = rel["target_entity"].copy()
+            src_e["index"] = e_index[f'{src_e["start_token"]}-{src_e["end_token"]}']
+            trg_e["index"] = e_index[f'{trg_e["start_token"]}-{trg_e["end_token"]}']
+            rel["source_entity"] = src_e
+            rel["target_entity"] = trg_e
+
+        output["relations"] = relations
         return output
 
     async def run_ner(self, text: Text, **kwargs):

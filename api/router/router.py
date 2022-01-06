@@ -29,12 +29,15 @@ except:
 
 
 @model_router.get("/run")
-async def predict(text: Text):
+async def run(text: Text):
     output = await model_service.run(text)
     entities = output.get("entities", [])
     relations = output.get("relations", [])
-    db.create_entities(entities)
-    db.create_relations(relations)
+    try :
+        db.create_entities(entities)
+        db.create_relations(relations)
+    except:
+        raise HTTPException(status_code=503, detail="Neo4j DB not is available!")
     return output
 
 
