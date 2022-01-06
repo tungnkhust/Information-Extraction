@@ -6,6 +6,10 @@ from src.pipelines.base import PipelineBase
 from src.utils.helpers import get_module
 from typing import Text
 
+from src.evaluation.RelEvaluation import RelEvaluation
+from src.evaluation.TagEvaluation import TagEvaluation
+from tqdm import tqdm
+
 
 class InfoExPipeline(PipelineBase):
     def __init__(
@@ -41,11 +45,29 @@ class InfoExPipeline(PipelineBase):
         return kwargs
 
     def evaluate(self, file_path, **kwargs):
-        predictions = []
+        tag_evaluation = TagEvaluation()
+        rel_evaluation = RelEvaluation()
         reader = CoNLLReader(test_path=file_path)
         examples = reader.get_examples("test")
-        for example in examples:
+        true_tags = []
+        pred_tags = []
+
+        true_relations = []
+        pred_relations = []
+
+        for example in tqdm(examples):
             output = self.run(example.get_text())
+            true_tags.append(example.get_bio_tags())
+            pred_tags.append(output["tags"])
+            true_relations.append(example.get_relations())
+            pred_relations.append(output["relations"])
+
+        tag_result = tag_evaluation.evaluate(true_tags, pred_tags, result_dir=None)
+        rel_result = rel_evaluation.evaluate(true_relations, pred_relations)
+        results = dict()
+        results["entity_result"] = tag_result
+        results["relation_result"] = rel_result
+        return results
 
     @classmethod
     def from_confg(cls, config):
