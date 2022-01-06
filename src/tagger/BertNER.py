@@ -105,16 +105,20 @@ class BertNER(TaggerBase):
 
     def run(self, text: Text, **kwargs):
         output = self.inferencer(text)
+        print(output)
         entity = output[0]["entity"]
         s = int(output[0]["start"])
         e = int(output[0]["end"])
         entities = []
         for i, token in enumerate(output[1:]):
             if 'B-' in token["entity"]:
-                entities.append({"entity": entity[2:], "start": int(s), "end": int(e), "value": text[s:e]})
-                s = token["start"]
-                e = token["end"]
-                entity = token["entity"]
+                if token["word"][0] == "#":
+                    e = token["end"]
+                else:
+                    entities.append({"entity": entity[2:], "start": int(s), "end": int(e), "value": text[s:e]})
+                    s = token["start"]
+                    e = token["end"]
+                    entity = token["entity"]
 
                 if i == len(output) - 2:
                     entities.append({"entity": entity[2:], "start": int(s), "end": int(e), "value": text[s:e]})
