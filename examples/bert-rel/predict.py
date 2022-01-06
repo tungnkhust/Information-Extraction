@@ -2,7 +2,7 @@ from transformers import AutoTokenizer, AutoModelForTokenClassification
 from transformers import pipeline
 from src.relation_extraction.BertRelCLF import BertRelCLF
 from src.data_reader import CoNLLReader
-model_name_or_path = "distilbert-base-uncased"
+model_name_or_path = "models/bert-rel"
 
 
 reader = CoNLLReader(
@@ -22,8 +22,8 @@ model = BertRelCLF(
 )
 
 text = "In Indiana , downed tree limbs interrupted power in parts of Indianapolis ."
-entities = [{'entity': 'Loc', 'value': 'In', 'start_token': 0, 'end_token': 1},
-            {'entity': 'Loc', 'value': ',', 'start_token': 2, 'end_token': 3}]
+entities = [{'entity': 'Loc', 'start': 3, 'end': 10, 'value': 'Indiana', 'start_token': 1, 'end_token': 2},
+            {'entity': 'Loc', 'start': 61, 'end': 73, 'value': 'Indianapolis', 'start_token': 11, 'end_token': 12}]
 
 print(text)
 out = model.run(text=text, entities=entities)

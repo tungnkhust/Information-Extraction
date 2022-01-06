@@ -19,7 +19,7 @@ import numpy as np
 from src.tagger import TaggerBase
 from src.data_reader import CoNLLReader
 from src.datasets.TagDataset import TagDataset
-from src.utils.utils import convert_entities_to_bio
+from src.utils.utils import convert_entities_to_bio, update_word_index_entity
 
 
 class BertNER(TaggerBase):
@@ -108,7 +108,6 @@ class BertNER(TaggerBase):
         entity = output[0]["entity"]
         s = int(output[0]["start"])
         e = int(output[0]["end"])
-
         entities = []
         for i, token in enumerate(output[1:]):
             if 'B-' in token["entity"]:
@@ -124,6 +123,9 @@ class BertNER(TaggerBase):
                 e = token["end"]
                 if i == len(output) - 2:
                     entities.append({"entity": entity[2:], "start": int(s), "end": int(e), "value": text[s:e]})
+
+        for i, entity in enumerate(entities):
+            entities[i] = update_word_index_entity(entity, text)
 
         tags = convert_entities_to_bio(entities=entities, text=text)
         kwargs["text"] = text

@@ -2,6 +2,21 @@ import json
 import yaml
 
 
+def update_word_index_entity(entity, text):
+    tokens = text.split(' ')
+    char_to_word = dict()
+    char_to_word[0] = 0
+    temp = 0
+    for i in range(1, len(tokens)):
+        temp = temp + len(tokens[i - 1]) + 1
+        char_to_word[temp] = i
+    char_to_word[len(text)+1] = len(tokens)
+    entity["start_token"] = char_to_word[entity["start"]]
+    entity["end_token"] = char_to_word[entity["end"] + 1]
+
+    return entity
+
+
 def update_char_index_entity(entity, tokens):
     text = " ".join(tokens)
     # get index start words
@@ -32,15 +47,8 @@ def convert_entities_to_bio(entities, text):
         else:
             label = info["entity"]
 
-        if "start_token" in info:
-            start = info["start_token"]
-        else:
-            start = info['start']
-
-        if "end_token" in info:
-            end = info['end_token']
-        else:
-            end = info['end']
+        start = info["start"]
+        end = info['end']
 
         value = text[start:end]
         list_value = value.split(" ")

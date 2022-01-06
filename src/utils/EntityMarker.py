@@ -24,15 +24,10 @@ class EntityMarker():
     def entity_mark(self, tokens: List, src_entity, trg_entity):
         tokens = tokens.copy()
         src_e = src_entity["entity"]
-        if "start_token" in src_entity:
-            src_start = src_entity["start_token"]
-        else:
-            src_start = src_entity["start"]
 
-        if "end_token" in src_entity:
-            src_end = src_entity["end_token"]
-        else:
-            src_end = src_entity["end"]
+        src_start = src_entity["start_token"]
+
+        src_end = src_entity["end_token"]
 
         mark_tokens = dict()
         mark_tokens[src_start] = f"[{src_e}]"
@@ -60,38 +55,32 @@ class EntityMarker():
     def standard_mark(self, tokens: List, src_entity, trg_entity):
         tokens = tokens.copy()
         src_e = src_entity["entity"]
-        if "start_token" in src_entity:
-            src_start = src_entity["start_token"]
-        else:
-            src_start = src_entity["start"]
-
-        if "end_token" in src_entity:
-            src_end = src_entity["end_token"]
-        else:
-            src_end = src_entity["end"]
-
-        mark_tokens = dict()
-        mark_tokens[src_start] = src_e
-        mark_tokens[src_end] = src_e
+        src_start = src_entity["start_token"]
+        src_end = src_entity["end_token"]
 
         trg_e = trg_entity["entity"]
-        if "start_token" in src_entity:
-            trg_start = trg_entity["start_token"]
-        else:
-            trg_start = trg_entity["start"]
+        trg_start = trg_entity["start_token"]
+        trg_end = trg_entity["end_token"]
 
-        if "end_token" in trg_entity:
-            trg_end = trg_entity["end_token"]
+        if src_start < trg_start:
+            first_start = src_start
+            first_end = src_end
+            first_e = src_e
+            second_start = trg_start
+            second_end = trg_end
+            second_e = trg_e
         else:
-            trg_end = trg_entity["end"]
+            first_start = trg_start
+            first_end = trg_end
+            first_e = trg_e
+            second_start = src_start
+            second_end = src_end
+            second_e = src_e
 
-        mark_tokens[trg_start] = trg_e
-        mark_tokens[trg_end] = trg_e
-        mark_tokens = sorted(mark_tokens.items(), key=lambda x: x[0])
-        new_tokens = tokens[: mark_tokens[0][0]]
-        new_tokens.append(mark_tokens[0][1])
-        new_tokens += tokens[mark_tokens[1][0]: mark_tokens[2][0]]
-        new_tokens.append(mark_tokens[0][1])
-        new_tokens += tokens[mark_tokens[3][0]:]
+        new_tokens = tokens[: first_start]
+        new_tokens.append(f'[{first_e}]')
+        new_tokens += tokens[first_end: second_start]
+        new_tokens.append(f'[{second_e}]')
+        new_tokens += tokens[second_end:]
 
         return new_tokens

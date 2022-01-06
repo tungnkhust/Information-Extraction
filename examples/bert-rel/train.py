@@ -12,7 +12,7 @@ if __name__ == '__main__':
     parser.add_argument("-train", "--train_path", default="data/CoNLL04/train.txt")
     parser.add_argument("-dev", "--dev_path", default="data/CoNLL04/dev.txt")
     parser.add_argument("-test", "--test_path", default="data/CoNLL04/test.txt")
-    parser.add_argument("-out", "--output_dir", default="./models/bert-rel-test-save")
+    parser.add_argument("-out", "--output_dir", default="./models/bert-rel-standard")
     parser.add_argument("-len", "--max_seq_length", type=int, default=256)
     parser.add_argument("-bs", "--batch_size", type=int, default=2)
     parser.add_argument("-epoch", "--num_epochs", type=int, default=2)
@@ -21,7 +21,7 @@ if __name__ == '__main__':
     parser.add_argument("--max_grad_norm", type=int, default=1.0)
     parser.add_argument("--evaluation_strategy", type=str, default="epoch")
     parser.add_argument("--save_strategy", type=str, default="no")
-    parser.add_argument("--marker_mode", type=str, default="entity", help="entity or standard")
+    parser.add_argument("--marker_mode", type=str, default="standard", help="entity or standard")
     parser.add_argument("--fp16",  default=False, action="store_true")
     args = parser.parse_args()
 
