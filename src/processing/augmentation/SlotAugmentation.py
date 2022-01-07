@@ -4,7 +4,7 @@ import random
 
 
 class SlotAugmentation:
-    def __init__(self, ontology: Dict):
+    def __init__(self, ontology: Dict = None):
         self.ontology = ontology
 
     def get_slot_value(self, key):
