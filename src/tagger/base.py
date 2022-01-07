@@ -5,6 +5,7 @@ import pandas as pd
 
 from src.data_reader import CoNLLReader
 from src.evaluation.TagEvaluation import TagEvaluation, compute_score
+from src.utils.utils import write_json
 from tqdm import tqdm
 
 
@@ -23,6 +24,7 @@ class TaggerBase:
         mis_examples = []
         spu_examples = []
         fail_examples = []
+        par_examples = []
 
         for example in tqdm(examples):
             text = example.get_text()
@@ -41,7 +43,7 @@ class TaggerBase:
                     "text": text,
                     "true_tag": true_tag,
                     "pred_tag": pred_tag,
-                    "fail_entities": str(score["incorrect"])
+                    "incorrect_entities": score["incorrect"]
                 })
 
             if score["missing"]:
@@ -49,7 +51,7 @@ class TaggerBase:
                     "text": text,
                     "true_tag": true_tag,
                     "pred_tag": pred_tag,
-                    "fail_entities": str(score["missing"])
+                    "missing_entities": score["missing"]
                 })
 
             if score["spurius"]:
@@ -57,7 +59,15 @@ class TaggerBase:
                     "text": text,
                     "true_tag": true_tag,
                     "pred_tag": pred_tag,
-                    "fail_entities": str(score["spurius"])
+                    "spurius_entities": score["spurius"]
+                })
+
+            if score["partial"]:
+                par_examples.append({
+                    "text": text,
+                    "true_tag": true_tag,
+                    "pred_tag": pred_tag,
+                    "partial_entities": score["partial"]
                 })
 
             if true_tag != pred_tag:
@@ -74,22 +84,15 @@ class TaggerBase:
             soft_eval=soft_eval)
 
         if result_dir:
-            inc_path = os.path.join(result_dir, "incorrect.csv")
-            miss_path = os.path.join(result_dir, "missing.csv")
-            spu_path = os.path.join(result_dir, "spurius.csv")
-            fail_path = os.path.join(result_dir, "fail.csv")
+            inc_path = os.path.join(result_dir, "incorrect.json")
+            miss_path = os.path.join(result_dir, "missing.json")
+            spu_path = os.path.join(result_dir, "spurius.json")
+            fail_path = os.path.join(result_dir, "fail.json")
 
-            inc_df = pd.DataFrame(inc_examples)
-            inc_df.to_csv(inc_path, index=False)
-
-            miss_df = pd.DataFrame(mis_examples)
-            miss_df.to_csv(miss_path, index=False)
-
-            spu_df = pd.DataFrame(spu_examples)
-            spu_df.to_csv(spu_path, index=False)
-
-            fail_df = pd.DataFrame(fail_examples)
-            fail_df.to_csv(fail_path, index=False)
+            write_json(inc_examples, inc_path)
+            write_json(mis_examples, miss_path)
+            write_json(spu_examples, spu_path)
+            write_json(fail_examples, fail_path)
 
         return results
 

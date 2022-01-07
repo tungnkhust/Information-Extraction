@@ -92,12 +92,15 @@ def convert_bio_to_entities(text, bio):
     entities = []
 
     # get index start words
-    char_ids = [0]
-    temp = 0
-    for i in range(1, len(tokens)):
-        char_ids.append(temp + len(tokens[i - 1]) + 1)
-        temp = char_ids[-1]
-    char_ids.append(len(text) + 1)
+    if tokens:
+        char_ids = [0]
+        temp = 0
+        for i in range(1, len(tokens)):
+            char_ids.append(temp + len(tokens[i - 1]) + 1)
+            temp = char_ids[-1]
+        char_ids.append(len(text) + 1)
+    else:
+        char_ids = None
 
     for i, tag in enumerate(tags):
         if tag[0] == 'B':
@@ -105,23 +108,34 @@ def convert_bio_to_entities(text, bio):
             s = i
             e = i
             if i == len(tags) - 1:
-                entities.append({"entity": entity,
-                                 "start_token": s, "end_token": e+1,
-                                 "start": char_ids[s], "end": char_ids[e+1],
-                                 "value": " ".join(tokens[s: e+1])})
+                if tokens:
+                    entities.append({"entity": entity,
+                                     "start_token": s, "end_token": e+1,
+                                     "start": char_ids[s], "end": char_ids[e+1],
+                                     "value": " ".join(tokens[s: e+1])})
+                else:
+                    entities.append({"entity": entity, "start_token": s, "end_token": e + 1})
+
         elif tag[0] == 'I':
             e += 1
             if i == len(tags) - 1:
-                entities.append({"entity": entity,
-                                 "start_token": s, "end_token": e+1,
-                                 "start": char_ids[s], "end": char_ids[e + 1],
-                                 "value": " ".join(tokens[s: e + 1])})
+                if tokens:
+                    entities.append({"entity": entity,
+                                     "start_token": s, "end_token": e + 1,
+                                     "start": char_ids[s], "end": char_ids[e + 1],
+                                     "value": " ".join(tokens[s: e + 1])})
+                else:
+                    entities.append({"entity": entity, "start_token": s, "end_token": e + 1})
+
         elif tag == 'O':
             if entity is not None:
-                entities.append({"entity": entity,
-                                 "start_token": s, "end_token": e+1,
-                                 "start": char_ids[s], "end": char_ids[e + 1],
-                                 "value": " ".join(tokens[s: e + 1])})
+                if tokens:
+                    entities.append({"entity": entity,
+                                     "start_token": s, "end_token": e + 1,
+                                     "start": char_ids[s], "end": char_ids[e + 1],
+                                     "value": " ".join(tokens[s: e + 1])})
+                else:
+                    entities.append({"entity": entity, "start_token": s, "end_token": e + 1})
                 entity = None
 
     return entities

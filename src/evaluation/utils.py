@@ -74,7 +74,13 @@ class Column:
         self.value = value
         self.max_seq = self.max_line()
 
+    def n_rows(self):
+        return len(self.value)
+
     def __getitem__(self, i):
+        if i >= self.n_rows():
+            return ' '*self.max_seq
+
         return self.value[i]
 
     def max_line(self):
@@ -83,7 +89,32 @@ class Column:
         return max(max([len(str(v)) for v in self.value]), len(self.key))
 
     def print_item(self, i):
-        return str(self.value[i]) + ' '*(self.max_seq-len(str(self.value[i])))
+        if i >= self.n_rows():
+            return " "*self.max_seq
+        else:
+            return str(self.value[i]) + ' '*(self.max_seq-len(str(self.value[i])))
 
     def print_key(self):
         return str(self.key) + ' ' * (self.max_seq - len(str(self.key)))
+
+
+def convert_column_to_text(columns: List[Column]):
+    text = ''
+    for c in columns:
+        text += c.print_key()
+        text += '\t'
+    text += '\n'
+
+    max_rows = max([c.n_rows() for c in columns])
+    for i in range(max_rows):
+        for c in columns:
+            text += c.print_item(i)
+            text += '\t'
+        text += '\n'
+
+    return text
+
+
+# c1 = Column('c1', [1, 222, 3, 4333, 5, 6])
+# c2 = Column('c2', [1, 2, 3, 3334, 5, 6, 4, 4])
+# print(convert_column_to_text([c1, c2]))

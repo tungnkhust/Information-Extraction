@@ -5,50 +5,11 @@ import sys
 from collections import Counter
 import copy
 import os
-from src.evaluation.utils import plot_confusion_matrix, Column
+from src.evaluation.utils import plot_confusion_matrix, Column, convert_column_to_text
 from src.schema import Entity
+from src.utils.utils import convert_bio_to_entities
 
 ROOT_PATH = sys.path[1]
-
-
-def get_entity_from_BIO(tags: List[str], tokens: List = None) -> List:
-    """
-    Get entities from BIO tags.
-    :param tags: List of tagging for each tokens.
-    :return: List entities that tagged in sentence.
-    """
-    if tags is None:
-        return []
-    s = 0
-    e = 0
-    entity = None
-    entities = []
-    for i, tag in enumerate(tags):
-        if tag[0] == 'B':
-            entity = tag[2:]
-            s = i
-            e = i
-            if i == len(tags) - 1:
-                entity_dict = {'entity': entity, 'start': s, 'end': e}
-                if tokens:
-                    entity_dict["value"] = " ".join(tokens[s:e+1])
-                entities.append(entity_dict)
-        elif tag[0] == 'I':
-            e += 1
-            if i == len(tags) - 1:
-                entity_dict = {'entity': entity, 'start': s, 'end': e}
-                if tokens:
-                    entity_dict["value"] = " ".join(tokens[s:e+1])
-                entities.append(entity_dict)
-        elif tag == 'O':
-            if entity is not None:
-                entity_dict = {'entity': entity, 'start': s, 'end': e}
-                if tokens:
-                    entity_dict["value"] = " ".join(tokens[s:e+1])
-                entities.append(entity_dict)
-                entity = None
-
-    return entities
 
 
 def compare_entity(e_true, e_pred):
@@ -106,8 +67,12 @@ def compute_score(y_true: list, y_pred: list, tokens: list = None):
     :return: Dict include metric to evaluate for each entity
     and list of incorrect, missing and spurius entities.
     """
-    entities_true = get_entity_from_BIO(y_true, tokens)
-    entities_pred = get_entity_from_BIO(y_pred, tokens)
+    try:
+        entities_true = convert_bio_to_entities(text=tokens, bio=y_true)
+        entities_pred = convert_bio_to_entities(text=tokens, bio=y_pred)
+    except:
+        print(y_true, y_pred, tokens)
+        raise
     metrics = {
         'support': len(entities_true),
         'cor': 0,
@@ -120,6 +85,8 @@ def compute_score(y_true: list, y_pred: list, tokens: list = None):
     incorrect = []
     missing = []
     spurius = []
+    partial = []
+
     while len(entities_true) != 0 or len(entities_pred) != 0:
         if len(entities_true) == 0:
             metrics['spu'] += 1
@@ -149,6 +116,7 @@ def compute_score(y_true: list, y_pred: list, tokens: list = None):
             del entities_pred[0]
         elif state == 3:
             metrics['par'] += 1
+            partial.append((e1, e1))
             del entities_true[0]
             del entities_pred[0]
         elif state == 4:
@@ -166,6 +134,7 @@ def compute_score(y_true: list, y_pred: list, tokens: list = None):
         "incorrect": incorrect,
         "missing": missing,
         "spurius": spurius,
+        "partial": partial
     }
 
 
@@ -184,6 +153,7 @@ def get_metrics(y_true: List[List], y_pred: List[List]):
     incorrects = []
     missings = []
     spuriuses = []
+    partials = []
 
     for i in range(n_samples):
         scores = compute_score(y_true[i], y_pred[i])
@@ -192,6 +162,7 @@ def get_metrics(y_true: List[List], y_pred: List[List]):
         incorrect = scores["incorrect"]
         missing = scores["missing"]
         spurius = scores["spurius"]
+        partial = scores["partial"]
 
         metrics['cor'] += metric['cor']
         metrics['inc'] += metric['inc']
@@ -199,10 +170,13 @@ def get_metrics(y_true: List[List], y_pred: List[List]):
         metrics['mis'] += metric['mis']
         metrics['spu'] += metric['spu']
         metrics['support'] += metric['support']
+
         corrects.append(correct)
         incorrects.append(incorrect)
         missings.append(missing)
         spuriuses.append(spurius)
+        partials.append(partial)
+
 
     return {
         "metrics": metrics,
@@ -210,6 +184,7 @@ def get_metrics(y_true: List[List], y_pred: List[List]):
         "incorrects": incorrects,
         "missings": missings,
         "spuriuses": spuriuses,
+        "partials": partials
     }
 
 
@@ -370,6 +345,18 @@ class TagEvaluation:
         return count_cor
 
     @staticmethod
+    def analyse_par(partials):
+        count_par = Counter()
+        for sample in partials:
+            check = []
+            for e in sample:
+                e = e[0]
+                if e not in check:
+                    count_par[e["entity"]] += 1
+                    check.append(sample)
+        return count_par
+
+    @staticmethod
     def analyse_inc(incorrects):
         inc_true = []
         inc_pred = []
@@ -406,6 +393,7 @@ class TagEvaluation:
         incorrects = scores["incorrects"]
         missings = scores["missings"]
         spuriuses = scores["spuriuses"]
+        partials = scores["partials"]
 
         n_predict = metrics['cor'] + metrics['inc'] + metrics['par'] + metrics['spu']
         if soft_eval is True:
@@ -424,13 +412,14 @@ class TagEvaluation:
         count_inc = self.analyse_inc(incorrects)
         count_mis = self.analyse_miss(missings)
         count_spu = self.analyse_spu(spuriuses)
+        count_par = self.analyse_par(partials)
 
         report_entity = {}
         entity_report = list(count_cor.keys()) + list(count_inc.keys()) + list(count_mis.keys()) + list(count_spu.keys())
         entity_report = sorted(set(entity_report))
 
         for e in entity_report:
-            report = {'cor': 0, 'inc': 0, 'mis': 0, 'spu': 0, 'support': 0}
+            report = {'cor': 0, 'inc': 0, 'mis': 0, 'spu': 0, 'precision': 0, 'recall': 0, 'f1-score': 0, 'support': 0}
             if e in count_cor:
                 report['cor'] = count_cor[e]
             if e in count_inc:
@@ -439,31 +428,53 @@ class TagEvaluation:
                 report['mis'] = count_mis[e]
             if e in count_spu:
                 report['spu'] = count_spu[e]
+            if e in count_par:
+                report['par'] = count_par[e]
 
-            support = report['cor'] + report['inc'] + report['mis']
+            support = report['cor'] + report['inc'] + report["par"] + report['mis']
+            n_e_predict = report['cor'] + report['inc'] + report["par"] + report['spu']
+            if soft_eval:
+                e_precision = (report['cor'] + report['par'] + epsilon) / (n_e_predict + epsilon)
+                e_recall = (report['cor'] + report['par'] + epsilon) / (support + epsilon)
+            else:
+                e_precision = (report['cor'] + epsilon) / (n_e_predict + epsilon)
+                e_recall = (report['cor'] + epsilon) / (support + epsilon)
+
+            e_f1 = (2 * e_precision * e_recall) / (e_precision + e_recall)
+
             report['support'] = support
-
-            report_entity[e] = report
+            report['precision'] = round(e_precision, 4)
+            report['recall'] = round(e_recall, 4)
+            report['f1-score'] = round(e_f1, 4)
+            report_entity[e] = report.copy()
 
         results = dict()
         results["precision"] = round(precision, 4)
         results["recall"] = round(recall, 4)
-        results["f1_score"] = round(f1_score, 4)
+        results["f1-score"] = round(f1_score, 4)
         results["entity_report"] = report_entity.copy()
 
         report_entity = sorted(report_entity.items(), key=lambda x: x[1]['inc'], reverse=True)
         entity_report = [report[0] for report in report_entity]
         cor_report = [report[1]['cor'] for report in report_entity]
+        par_report = [report[1]['par'] for report in report_entity]
         inc_report = [report[1]['inc'] for report in report_entity]
         mis_report = [report[1]['mis'] for report in report_entity]
         spu_report = [report[1]['spu'] for report in report_entity]
+        precision_report = [report[1]['precision'] for report in report_entity]
+        recall_report = [report[1]['recall'] for report in report_entity]
+        f1_report = [report[1]['f1-score'] for report in report_entity]
         support_report = [report[1]['support'] for report in report_entity]
 
         e_c = Column('entity', entity_report)
-        c_c = Column('cor', cor_report)
-        i_c = Column('inc', inc_report)
-        m_c = Column('mis', mis_report)
-        s_c = Column('spu', spu_report)
+        c_c = Column('correct', cor_report)
+        p_c = Column('partial', par_report)
+        i_c = Column('incorrect', inc_report)
+        m_c = Column('missing', mis_report)
+        s_c = Column('spurius', spu_report)
+        pre_c = Column('precision', precision_report)
+        rec_c = Column('recall', recall_report)
+        f1_c = Column('f1-score', f1_report)
         sp_c = Column('support', support_report)
 
         if result_dir:
@@ -472,25 +483,17 @@ class TagEvaluation:
 
             metric_path = os.path.join(result_dir, "metric_results.txt")
             with open(metric_path, 'w') as pf:
-                c1 = Column(key='precision', value=[round(precision, 4)])
-                c2 = Column(key='recall', value=[round(recall, 4)])
-                c3 = Column(key='f1_score', value=[round(f1_score, 4)])
+                c_k = Column(key=' ', value=["micro", "macro"])
+                c1 = Column(key='precision', value=[round(precision, 4), round(sum(pre_c.value)/pre_c.n_rows(), 4)])
+                c2 = Column(key='recall', value=[round(recall, 4), round(sum(rec_c.value)/rec_c.n_rows(), 4)])
+                c3 = Column(key='f1_score', value=[round(f1_score, 4), round(sum(f1_c.value)/f1_c.n_rows(), 4)])
                 pf.write('### Precision-Recall-F1 Score\n')
-                pf.write(c1.print_key() + '    ' + c2.print_key() + '    ' + c3.print_key())
-                pf.write('\n')
-                pf.write(c1.print_item(0) + '    ' + c2.print_item(0) + '    ' + c3.print_item(0))
+                pf.write(convert_column_to_text([c_k, c1, c2, c3]))
+
                 pf.write('\n')
                 pf.write('\n')
                 pf.write('### MUC Score\n')
-                pf.write(e_c.print_key() + '    ' + c_c.print_key()
-                         + '    ' + i_c.print_key() + '    ' + m_c.print_key()
-                         + '    ' + s_c.print_key() + '    ' + sp_c.print_key())
-                pf.write('\n')
-                for i in range(len(entity_report)):
-                    pf.write(e_c.print_item(i) + '    ' + c_c.print_item(i)
-                             + '    ' + i_c.print_item(i) + '    ' + m_c.print_item(i)
-                             + '    ' + s_c.print_item(i) + '    ' + sp_c.print_item(i))
-                    pf.write('\n')
+                pf.write(convert_column_to_text([e_c, c_c, p_c, i_c, m_c, s_c, pre_c, rec_c, f1_c, sp_c]))
 
                 pf.write('\n')
                 pf.write('- Correct(cor): Both are the same\n')
