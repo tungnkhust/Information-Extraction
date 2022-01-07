@@ -28,7 +28,7 @@ class BaseReader:
         counter = Counter()
 
         for example in examples:
-            entities = example.get_entities()
+            entities = example.entities
             for e in entities:
                 counter[e.entity] += 1
 
@@ -39,7 +39,7 @@ class BaseReader:
         r_counter = Counter()
         rdf_counter = Counter()
         for example in examples:
-            relations = example.get_relations()
+            relations = example.relations
             for r in relations:
                 relation = r.relation
                 r_counter[relation] += 1

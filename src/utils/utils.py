@@ -2,6 +2,15 @@ import json
 import yaml
 
 
+def batch(elements: list, batch_size: int, drop_last=False):
+    n_batch = int(len(elements)/batch_size)
+    for i in range(n_batch):
+        yield elements[i*batch_size: (i+1)*batch_size]
+
+    if drop_last is False:
+        yield elements[(n_batch-1)*batch_size:]
+
+
 def update_word_index_entity(entity, text):
     pre_start_token = text[:entity["start"]].strip(" ").split(" ")
     pre_start_token = [token for token in pre_start_token if token != '']

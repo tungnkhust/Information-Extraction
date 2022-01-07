@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from src.db_api.Neo4jDB import Neo4jDB
 from src.schema.schema import Relation, Entity
 from api.service.ModelService import ModelService
+import time
 
 
 load_dotenv()
@@ -43,7 +44,10 @@ async def run(text: Text):
 
 @model_router.get("/predict")
 async def predict(text: Text):
+    s_t = time.time()
     output = await model_service.run(text)
+    e_t = time.time()
+    output["time"] = e_t - s_t
     return output
 
 

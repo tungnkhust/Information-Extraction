@@ -18,6 +18,7 @@ import numpy as np
 
 from src.relation_extraction import RelBase
 from src.utils.EntityMarker import EntityMarker
+from src.utils.utils import batch
 
 
 class BertRelCLF(RelBase):
@@ -28,8 +29,10 @@ class BertRelCLF(RelBase):
             label2idx: Dict = None,
             max_seq_length: int = 512,
             device: str = None,
-            marker_mode: Text = None
+            marker_mode: Text = None,
+            other_entity: Text = "Other"
     ):
+        self.other_entity = other_entity
         self.label2idx = label2idx
         if model_name_or_path:
             if label2idx:
@@ -79,7 +82,7 @@ class BertRelCLF(RelBase):
         else:
             self.inferencer = None
 
-    def run(self, text: Text, entities: List, **kwargs):
+    def run(self, text: Text, entities: List, batch_size=8, **kwargs):
         kwargs["text"] = text
         kwargs["entities"] = entities
         kwargs["relations"] = []
@@ -106,24 +109,42 @@ class BertRelCLF(RelBase):
                 }
                 relations.append(relation)
         else:
+            text_marks = {}
             for i in range(len(entities)-1):
+                if entities[i]["entity"] == self.other_entity:
+                    continue
                 for j in range(i+1, len(entities)):
+                    if entities[j]["entity"] == self.other_entity:
+                        continue
+
                     src_e = entities[i]
                     trc_e = entities[j]
+
                     token_marked = self.entity_marker.mark(src_entity=src_e, trg_entity=trc_e, tokens=tokens)
                     text_marked = " ".join(token_marked)
-                    output = self.inferencer(text_marked)
+                    text_marks[f'{i}-{j}'] = text_marked
 
-                    rel_label = output[0]["label"]
-                    score = output[0]["score"]
-                    if rel_label != "no_relation":
-                        relation = {
-                            "source_entity": src_e,
-                            "target_entity": trc_e,
-                            "relation": rel_label,
-                            "score": score
-                        }
-                        relations.append(relation)
+            outputs = []
+            for text_batches in batch(list(text_marks.values()), batch_size=batch_size):
+                output = self.inferencer(text_batches)
+                outputs.extend(output)
+
+            pair_e_index = list(text_marks.keys())
+
+            for i, output in enumerate(outputs):
+                rel_label = output["label"]
+                score = output["score"]
+                if rel_label != "no_relation":
+                    src_index, trg_index = pair_e_index[i].split('-')
+                    src_e = entities[int(src_index)]
+                    trc_e = entities[int(trg_index)]
+                    relation = {
+                        "source_entity": src_e,
+                        "target_entity": trc_e,
+                        "relation": rel_label,
+                        "score": score
+                    }
+                    relations.append(relation)
         kwargs["relations"] = relations
 
         return kwargs
