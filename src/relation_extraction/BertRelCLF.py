@@ -77,8 +77,14 @@ class BertRelCLF(RelBase):
         else:
             self.device = device
 
+        self.cuda_device = -1 if self.device == "cpu" else 0
+
         if self.model:
-            self.inferencer = TextClassificationPipeline(tokenizer=self.tokenizer, model=self.model)
+            self.inferencer = TextClassificationPipeline(
+                tokenizer=self.tokenizer,
+                model=self.model,
+                device=self.cuda_device
+            )
         else:
             self.inferencer = None
 
@@ -125,26 +131,27 @@ class BertRelCLF(RelBase):
                     text_marks[f'{i}-{j}'] = text_marked
 
             outputs = []
-            for text_batches in batch(list(text_marks.values()), batch_size=batch_size):
-                output = self.inferencer(text_batches)
-                outputs.extend(output)
+            if text_marks:
+                for text_batches in batch(list(text_marks.values()), batch_size=batch_size):
+                    output = self.inferencer(text_batches)
+                    outputs.extend(output)
 
-            pair_e_index = list(text_marks.keys())
+                pair_e_index = list(text_marks.keys())
 
-            for i, output in enumerate(outputs):
-                rel_label = output["label"]
-                score = output["score"]
-                if rel_label != "no_relation":
-                    src_index, trg_index = pair_e_index[i].split('-')
-                    src_e = entities[int(src_index)]
-                    trc_e = entities[int(trg_index)]
-                    relation = {
-                        "source_entity": src_e,
-                        "target_entity": trc_e,
-                        "relation": rel_label,
-                        "score": score
-                    }
-                    relations.append(relation)
+                for i, output in enumerate(outputs):
+                    rel_label = output["label"]
+                    score = output["score"]
+                    if rel_label != "no_relation":
+                        src_index, trg_index = pair_e_index[i].split('-')
+                        src_e = entities[int(src_index)]
+                        trc_e = entities[int(trg_index)]
+                        relation = {
+                            "source_entity": src_e,
+                            "target_entity": trc_e,
+                            "relation": rel_label,
+                            "score": score
+                        }
+                        relations.append(relation)
         kwargs["relations"] = relations
 
         return kwargs

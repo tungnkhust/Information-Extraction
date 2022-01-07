@@ -8,7 +8,7 @@ def batch(elements: list, batch_size: int, drop_last=False):
         yield elements[i*batch_size: (i+1)*batch_size]
 
     if drop_last is False:
-        yield elements[(n_batch-1)*batch_size:]
+        yield elements[n_batch*batch_size:]
 
 
 def update_word_index_entity(entity, text):

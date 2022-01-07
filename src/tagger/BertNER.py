@@ -69,7 +69,13 @@ class BertNER(TaggerBase):
         else:
             self.device = device
 
-        self.inferencer = pipeline("ner", model=self.model, tokenizer=self.tokenizer)
+        self.cuda_device = -1 if self.device == "cpu" else 0
+
+        self.inferencer = pipeline("ner",
+                                   model=self.model,
+                                   tokenizer=self.tokenizer,
+                                   device=self.cuda_device
+                                   )
 
     def tokenize_and_align_labels(self, examples):
         tokenized_inputs = self.tokenizer(
